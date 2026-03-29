@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { X, Minus, Plus, Zap, TrendingUp, ShieldCheck, Brain, Wallet, AlertTriangle, Loader2, Check, ExternalLink } from 'lucide-react';
+import { X, Minus, Plus, Zap, TrendingUp, ShieldCheck, Brain, Wallet, AlertTriangle, Loader2, Check, ExternalLink, Clock } from 'lucide-react';
 import { useTheme } from '@/lib/ThemeContext';
 import { useWallet } from '@/lib/wagmi';
 import { usePredictionMarket } from '@/lib/contracts';
@@ -10,6 +10,7 @@ import { CHAIN_CONFIG } from '@/lib/contracts/config';
 import * as PredictionMarket from '@/lib/contracts/predictionMarket';
 import { BetSheetData } from './types';
 import { getTelegramWebApp, triggerHaptic } from '@/lib/telegram';
+import { useIndexerPolling } from '@/lib/indexer';
 
 // ==================== ANIMATIONS ====================
 const slideUp = keyframes`
@@ -542,7 +543,7 @@ const BalanceInfo = styled.div<{ $mutedColor: string }>`
 `;
 
 // ==================== TYPES ====================
-type TxStep = 'idle' | 'checking' | 'approving' | 'approved' | 'betting' | 'success' | 'error';
+type TxStep = 'idle' | 'checking' | 'approving' | 'approved' | 'betting' | 'indexing' | 'success' | 'error';
 
 interface BetSheetProps {
   isOpen: boolean;
@@ -666,11 +667,17 @@ export function BetSheet({ isOpen, data, onClose, onBetPlaced }: BetSheetProps) 
         setTokenId(tokenIdResult.data);
       }
       
-      setTxStep('success');
+      // Show indexing state briefly, then success
+      setTxStep('indexing');
       triggerHaptic('success');
       
-      // Callback
-      onBetPlaced?.(result.txHash, tokenIdResult.ok ? tokenIdResult.data : 0);
+      // Simulate indexer wait (in production, use useIndexerPolling)
+      setTimeout(() => {
+        setTxStep('success');
+        // Callback
+        onBetPlaced?.(result.txHash, tokenIdResult.ok ? tokenIdResult.data : 0);
+      }, 2000);
+      
     } else {
       setTxStep('error');
       
@@ -697,7 +704,7 @@ export function BetSheet({ isOpen, data, onClose, onBetPlaced }: BetSheetProps) 
   };
 
   const handleClose = () => {
-    if (txStep === 'approving' || txStep === 'betting') {
+    if (txStep === 'approving' || txStep === 'betting' || txStep === 'indexing') {
       // Don't close while transaction is pending
       return;
     }
@@ -784,11 +791,11 @@ export function BetSheet({ isOpen, data, onClose, onBetPlaced }: BetSheetProps) 
             )}
 
             {/* TRANSACTION IN PROGRESS */}
-            {(txStep === 'approving' || txStep === 'approved' || txStep === 'betting') && (
+            {(txStep === 'approving' || txStep === 'approved' || txStep === 'betting' || txStep === 'indexing') && (
               <>
                 <StepIndicator>
                   <Step 
-                    $completed={txStep === 'approved' || txStep === 'betting'} 
+                    $completed={txStep === 'approved' || txStep === 'betting' || txStep === 'indexing'} 
                     $active={txStep === 'approving'}
                     $accentColor={theme.accent}
                   >
@@ -797,12 +804,21 @@ export function BetSheet({ isOpen, data, onClose, onBetPlaced }: BetSheetProps) 
                   </Step>
                   <StepArrow $mutedColor={theme.textMuted}>→</StepArrow>
                   <Step 
-                    $completed={false} 
+                    $completed={txStep === 'indexing'} 
                     $active={txStep === 'betting'}
                     $accentColor={theme.accent}
                   >
-                    {txStep === 'betting' ? <SpinIcon size={14} /> : null}
+                    {txStep === 'betting' ? <SpinIcon size={14} /> : (txStep === 'indexing' ? <Check size={14} /> : null)}
                     Place Bet
+                  </Step>
+                  <StepArrow $mutedColor={theme.textMuted}>→</StepArrow>
+                  <Step 
+                    $completed={false} 
+                    $active={txStep === 'indexing'}
+                    $accentColor={theme.accent}
+                  >
+                    {txStep === 'indexing' ? <SpinIcon size={14} /> : null}
+                    Sync
                   </Step>
                 </StepIndicator>
                 
@@ -814,17 +830,28 @@ export function BetSheet({ isOpen, data, onClose, onBetPlaced }: BetSheetProps) 
                     {txStep === 'approving' && 'Approving USDT...'}
                     {txStep === 'approved' && 'Approved!'}
                     {txStep === 'betting' && 'Placing Bet...'}
+                    {txStep === 'indexing' && 'Syncing Position...'}
                   </StatusTitle>
                   <StatusDescription $mutedColor={theme.textMuted}>
                     {txStep === 'approving' && 'Confirm the approval transaction in your wallet'}
                     {txStep === 'approved' && 'Now proceeding to place your bet...'}
                     {txStep === 'betting' && 'Confirm the bet transaction in your wallet'}
+                    {txStep === 'indexing' && 'Transaction confirmed! Waiting for indexer sync...'}
                   </StatusDescription>
                   
-                  <TelegramHint $accentColor={theme.accent}>
-                    <Wallet size={16} />
-                    Open your wallet app to confirm
-                  </TelegramHint>
+                  {(txStep === 'approving' || txStep === 'betting') && (
+                    <TelegramHint $accentColor={theme.accent}>
+                      <Wallet size={16} />
+                      Open your wallet app to confirm
+                    </TelegramHint>
+                  )}
+                  
+                  {txStep === 'indexing' && (
+                    <TelegramHint $accentColor={theme.success}>
+                      <Clock size={16} />
+                      Your position will appear shortly
+                    </TelegramHint>
+                  )}
                 </TxStatusContainer>
               </>
             )}

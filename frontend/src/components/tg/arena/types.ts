@@ -135,8 +135,28 @@ function computeRisk(ai: MarketAI, fomo: MarketFomo): MarketRisk {
 
 // Transform API response to MarketCard
 export function transformMarket(apiMarket: any): MarketCard {
-  const yesPool = apiMarket.yesPool || 0;
-  const noPool = apiMarket.noPool || 0;
+  // Handle on-chain mirror format
+  let yesPool = 0;
+  let noPool = 0;
+  
+  // Parse totalStaked from on-chain (wei string)
+  if (apiMarket.totalStaked) {
+    const totalStakedWei = BigInt(apiMarket.totalStaked);
+    const totalStaked = Number(totalStakedWei / BigInt(10**18));
+    // Use fomoData sentiment if available
+    if (apiMarket.fomoData?.sentiment) {
+      yesPool = apiMarket.fomoData.sentiment.yesVolume || totalStaked / 2;
+      noPool = apiMarket.fomoData.sentiment.noVolume || totalStaked / 2;
+    } else {
+      // Default 50/50 split
+      yesPool = totalStaked / 2;
+      noPool = totalStaked / 2;
+    }
+  } else {
+    yesPool = apiMarket.yesPool || 0;
+    noPool = apiMarket.noPool || 0;
+  }
+  
   const total = yesPool + noPool || 1;
   
   const yesPercent = Math.round((yesPool / total) * 100);
@@ -145,18 +165,40 @@ export function transformMarket(apiMarket: any): MarketCard {
   const yesOdds = noPool > 0 ? +(total / yesPool).toFixed(2) : 2.0;
   const noOdds = yesPool > 0 ? +(total / noPool).toFixed(2) : 2.0;
   
-  const volume = apiMarket.totalVolume || (yesPool + noPool);
-  const betsCount = apiMarket.betsCount || Math.floor(volume / 50);
-  const closesAt = new Date(apiMarket.endTime || apiMarket.closesAt || Date.now() + 86400000);
+  const volume = apiMarket.totalVolume || apiMarket.fomoData?.activity?.totalVolume || (yesPool + noPool);
+  const betsCount = apiMarket.betsCount || apiMarket.fomoData?.activity?.totalBets || Math.floor(volume / 50);
+  
+  // Parse endTime (could be unix timestamp or date string)
+  let closesAt: Date;
+  if (apiMarket.endTime) {
+    const endTimeNum = typeof apiMarket.endTime === 'string' ? parseInt(apiMarket.endTime) : apiMarket.endTime;
+    // Check if it's unix timestamp (seconds) or milliseconds
+    closesAt = new Date(endTimeNum > 1e12 ? endTimeNum : endTimeNum * 1000);
+  } else if (apiMarket.closesAt) {
+    closesAt = new Date(apiMarket.closesAt);
+  } else {
+    closesAt = new Date(Date.now() + 86400000);
+  }
   
   const hoursLeft = (closesAt.getTime() - Date.now()) / (1000 * 60 * 60);
   
+  // Build FOMO data from fomoData if available
   const fomo: MarketFomo = {
-    trending: volume > 5000 || betsCount > 50,
-    urgency: hoursLeft < 2 ? 'high' : hoursLeft < 12 ? 'medium' : 'low',
+    trending: apiMarket.fomoData?.flags?.isTrending || volume > 5000 || betsCount > 50,
+    urgency: apiMarket.fomoData?.closing?.isUrgent 
+      ? 'high' 
+      : (hoursLeft < 2 ? 'high' : hoursLeft < 12 ? 'medium' : 'low'),
   };
   
-  if (volume > 10000) {
+  // Add whale data if available
+  if (apiMarket.fomoData?.whales?.length > 0) {
+    const topWhale = apiMarket.fomoData.whales[0];
+    fomo.whale = {
+      amount: topWhale.amount,
+      side: topWhale.side === 'yes' ? 'YES' : 'NO',
+      timeAgo: '5m ago'
+    };
+  } else if (volume > 10000) {
     fomo.whale = {
       amount: Math.floor(volume * 0.15),
       side: yesPercent > 50 ? 'YES' : 'NO',
@@ -165,7 +207,7 @@ export function transformMarket(apiMarket: any): MarketCard {
   }
   
   if (betsCount > 30) {
-    fomo.hotStreak = Math.floor(betsCount / 10);
+    fomo.hotStreak = apiMarket.fomoData?.activity?.betsLast5Min || Math.floor(betsCount / 10);
   }
   
   const ai = computeAI(apiMarket);
@@ -173,7 +215,7 @@ export function transformMarket(apiMarket: any): MarketCard {
   
   return {
     id: apiMarket._id || apiMarket.id || String(Math.random()),
-    onchainId: apiMarket.onchainId || apiMarket.chainMarketId,
+    onchainId: apiMarket.marketId || apiMarket.onchainId || apiMarket.chainMarketId,
     title: apiMarket.question || apiMarket.title || 'Unknown Market',
     yesPercent,
     noPercent,

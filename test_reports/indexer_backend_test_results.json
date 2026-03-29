@@ -1,0 +1,124 @@
+{
+  "timestamp": "2026-03-29T23:43:37.487983",
+  "summary": {
+    "tests_run": 21,
+    "tests_passed": 20,
+    "tests_failed": 1,
+    "success_rate": "95.2%"
+  },
+  "failed_tests": [
+    {
+      "name": "Webhook Event Processing",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"data\":{\"processed\":true,\"type\":\"bet_placed\",\"xp\":10,\"badges\":[],\"levelUp\":false}}"
+    }
+  ],
+  "detailed_results": {
+    "Indexer Status": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"lastSyncedBlock\":98639754,\"updatedAt\":\"2026-03-29T23:43:33.986Z\",\"isRunning\":true}}"
+    },
+    "Contract Config": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"contractAddress\":\"0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e\",\"chainId\":97,\"owner\":\"0x413cD446676a75a536d15Fa6c7396013E7809017\",\"claimFeeBps\":200,\"feeRecipient\":\"0x413cD446676a75a536d15Fa6c7396013E7809017\",\"minBet\":\"10000000000000000000\",\"minBetFormatted\":\"10.0\",\"minInitialStake\":\"100000000000000000000\",\"minInitialStakeFormatted\":\"100.0\",\"stableToken\":\"0x4EeF2A62E8A63b713C96CBADAc4C6622D1EAB948\",\"stableTokenDecimals\":18,\"userMarketRequestsEnabled\":true}}"
+    },
+    "Get On-chain Markets": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Markets with Status Filter": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Markets with Pagination": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":10,\"totalPages\":0}}"
+    },
+    "Markets Sorted by Trending": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Markets Sorted by Volume": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Get Positions for 0x12345678...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":50,\"totalPages\":0}}"
+    },
+    "Get Token IDs for 0x12345678...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Get Positions for 0xabcdefab...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":50,\"totalPages\":0}}"
+    },
+    "Get Token IDs for 0xabcdefab...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Positions with Status Filter": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":50,\"totalPages\":0}}"
+    },
+    "Get Profile for 0x12345678...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"stats\":{\"totalBets\":0,\"wins\":0,\"losses\":0,\"winrate\":0,\"totalStaked\":0,\"totalClaimed\":0,\"pnl\":0,\"avgBet\":0},\"streak\":{\"current\":0,\"best\":0},\"positions\":{\"active\":0,\"won\":0,\"lost\":0,\"claimed\":0}}}"
+    },
+    "Get Profile for 0xabcdefab...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\"stats\":{\"totalBets\":0,\"wins\":0,\"losses\":0,\"winrate\":0,\"totalStaked\":0,\"totalClaimed\":0,\"pnl\":0,\"avgBet\":0},\"streak\":{\"current\":0,\"best\":0},\"positions\":{\"active\":0,\"won\":0,\"lost\":0,\"claimed\":0}}}"
+    },
+    "Get Activities Feed": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":50,\"totalPages\":0}}"
+    },
+    "Activities with Type Filter": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":50,\"totalPages\":0}}"
+    },
+    "Activities with User Filter": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":50,\"totalPages\":0}}"
+    },
+    "Activities with Pagination": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Get On-chain Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Get On-chain Stats": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"totalMarkets\":0,\"activeMarkets\":0,\"totalPositions\":0,\"claimedPositions\":0,\"totalVolume\":0}}"
+    },
+    "Webhook Event Processing": {
+      "status": "FAILED",
+      "response_code": 201,
+      "error": "{\"success\":true,\"data\":{\"processed\":true,\"type\":\"bet_placed\",\"xp\":10,\"badges\":[],\"levelUp\":false}}"
+    }
+  }
+}
