@@ -1,0 +1,15 @@
+{
+  "name": "fomo-arena-indexer",
+  "version": "1.0.0",
+  "description": "Blockchain event indexer for FOMO Arena",
+  "main": "indexer.js",
+  "scripts": {
+    "start": "node indexer.js",
+    "dev": "node indexer.js"
+  },
+  "dependencies": {
+    "ethers": "^6.9.0",
+    "mongodb": "^6.3.0",
+    "dotenv": "^16.3.1"
+  }
+}

@@ -1,0 +1,15 @@
+export { default as SearchIcon } from './SearchIcon';
+export { default as AnalyticsIcon } from './AnalyticsIcon';
+export { default as MarketplaceIcon } from './MarketplaceIcon';
+export { default as ArenaTabIcon } from './ArenaTabIcon';
+export { default as DuelsTabIcon } from './DuelsTabIcon';
+export { default as LeaguesTabIcon } from './LeaguesTabIcon';
+export { default as BullIcon } from './BullIcon';
+export { default as BearIcon } from './BearIcon';
+export { default as FireHypeIcon } from './FireHypeIcon';
+export { default as AiSentimentIcon } from './AiSentimentIcon';
+export { default as SwordsIcon } from './SwordsIcon';
+export { default as Trophy } from './Trophy';
+export { default as Arrow } from './Arrow';
+export { default as League } from './League';
+export { default as Accuracy } from './Accuracy';

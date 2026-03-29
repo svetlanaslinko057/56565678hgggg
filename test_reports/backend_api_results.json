@@ -1,0 +1,193 @@
+{
+  "summary": {
+    "total_tests": 13,
+    "passed_tests": 12,
+    "success_rate": "92.3%",
+    "timestamp": "2026-03-29T23:12:57.117864"
+  },
+  "results": [
+    {
+      "test": "Health Check",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "status": "ok",
+        "service": "fomo-arena"
+      },
+      "timestamp": "2026-03-29T23:12:53.617852"
+    },
+    {
+      "test": "Onchain Markets",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "data": [],
+        "meta": {
+          "total": 0,
+          "page": 1,
+          "limit": 20,
+          "totalPages": 0
+        }
+      },
+      "timestamp": "2026-03-29T23:12:53.754520"
+    },
+    {
+      "test": "Indexer Status",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "lastSyncedBlock": 0,
+          "isRunning": false
+        }
+      },
+      "timestamp": "2026-03-29T23:12:55.183248"
+    },
+    {
+      "test": "Onchain Config",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "contractAddress": "0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e",
+          "chainId": 97,
+          "owner": "0x413cD446676a75a536d15Fa6c7396013E7809017",
+          "claimFeeBps": 200,
+          "feeRecipient": "0x413cD446676a75a536d15Fa6c7396013E7809017",
+          "minBet": "10000000000000000000",
+          "minBetFormatted": "10.0",
+          "minInitialStake": "100000000000000000000",
+          "minInitialStakeFormatted": "100.0",
+          "stableToken": "0x4EeF2A62E8A63b713C96CBADAc4C6622D1EAB948",
+          "stableTokenDecimals": 18,
+          "userMarketRequestsEnabled": true
+        }
+      },
+      "timestamp": "2026-03-29T23:12:55.650681"
+    },
+    {
+      "test": "FOMO Engine Stats",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "activeEvents": 0,
+          "byType": {},
+          "byPriority": {}
+        }
+      },
+      "timestamp": "2026-03-29T23:12:55.829983"
+    },
+    {
+      "test": "FOMO Engine Best Signal",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": null
+      },
+      "timestamp": "2026-03-29T23:12:56.003365"
+    },
+    {
+      "test": "FOMO Engine Events",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": []
+      },
+      "timestamp": "2026-03-29T23:12:56.149980"
+    },
+    {
+      "test": "Monetization Pricing",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "betBoost": {
+            "base": 1,
+            "description": "Highlight your bet in activity feed for 24 hours"
+          },
+          "duelFeatured": {
+            "base": 2,
+            "description": "Make your duel featured for 48 hours"
+          },
+          "platformFee": {
+            "base": 2,
+            "dynamic": {
+              "low": 2,
+              "medium": 2.5,
+              "high": 3
+            }
+          },
+          "duelFee": {
+            "base": 5,
+            "dynamic": {
+              "low": 5,
+              "high": 7
+            }
+          },
+          "creatorFee": 1
+        }
+      },
+      "timestamp": "2026-03-29T23:12:56.324713"
+    },
+    {
+      "test": "Boosted Bets",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": []
+      },
+      "timestamp": "2026-03-29T23:12:56.493919"
+    },
+    {
+      "test": "Featured Duels",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": []
+      },
+      "timestamp": "2026-03-29T23:12:56.651044"
+    },
+    {
+      "test": "Invalid ObjectId Handling",
+      "success": true,
+      "details": "Correctly returned 400 for invalid ObjectId",
+      "response_data": null,
+      "timestamp": "2026-03-29T23:12:56.843784"
+    },
+    {
+      "test": "Feature Duel Validation",
+      "success": true,
+      "details": "Status: 400 (expected 400)",
+      "response_data": {
+        "success": false,
+        "statusCode": 400,
+        "error": "Bad Request",
+        "message": "Invalid duel ID format",
+        "timestamp": "2026-03-29T23:12:56.972Z"
+      },
+      "timestamp": "2026-03-29T23:12:56.990203"
+    },
+    {
+      "test": "Win Card Validation",
+      "success": false,
+      "details": "Status: 400 (expected 404) | Response: {\"success\":false,\"statusCode\":400,\"error\":\"Bad Request\",\"message\":\"Invalid position ID format\",\"timestamp\":\"2026-03-29T23:12:57.099Z\"}",
+      "response_data": {
+        "success": false,
+        "statusCode": 400,
+        "error": "Bad Request",
+        "message": "Invalid position ID format",
+        "timestamp": "2026-03-29T23:12:57.099Z"
+      },
+      "timestamp": "2026-03-29T23:12:57.116924"
+    }
+  ]
+}

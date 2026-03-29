@@ -1,0 +1,80 @@
+{
+  "theme": "dark",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "design_philosophy": "Functional clarity, technical precision, and high-stakes environment. No playful shapes (pill-buttons). Sharp, authoritative, and data-first.",
+  "colors": {
+    "background": "#0A0A0A",
+    "surface": "#121212",
+    "primary": "#E63946",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#1E1E1E",
+    "secondary_foreground": "#A1A1AA",
+    "accent": "#27272A",
+    "border": "rgba(255, 255, 255, 0.1)",
+    "live_indicator": "#10B981"
+  },
+  "typography": {
+    "heading_font": "Cabinet Grotesk",
+    "body_font": "IBM Plex Sans",
+    "banned_fonts": ["Inter", "Roboto", "Space Grotesk", "Open Sans"],
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl tracking-tight font-bold",
+      "h2": "text-2xl sm:text-3xl tracking-tight font-semibold",
+      "body": "text-base leading-relaxed",
+      "ui_labels": "text-sm font-medium tracking-wide"
+    }
+  },
+  "geometry": {
+    "global_border_radius": "rounded-md",
+    "banned_classes": ["rounded-full", "rounded-2xl", "rounded-3xl", "rounded-xl", "rounded-lg"],
+    "description": "Strict adherence to slightly softened sharp edges (6px / 0.375rem). Pill shapes are strictly forbidden to maintain a professional, trading-terminal aesthetic."
+  },
+  "components": {
+    "header": {
+      "layout": "Flex container with horizontal alignment. Items should be vertically centered.",
+      "structure": "[Logo] -> [Navigation Links: Arena, Duels, Analyst Leagues] -> [Search Bar] -> [Create Market (Secondary CTA)] -> [Connect Wallet (Primary CTA)]",
+      "styling": "border-b border-white/10 bg-black/80 backdrop-blur-xl sticky top-0 z-50 px-6 py-4",
+      "spacing": "gap-6 or gap-8 between major groups."
+    },
+    "buttons": {
+      "connect_wallet": {
+        "role": "Primary CTA",
+        "styling": "bg-primary text-white hover:bg-primary/90 px-6 py-2 rounded-md font-medium transition-colors",
+        "data_testid": "connect-wallet-button"
+      },
+      "create_market": {
+        "role": "Secondary CTA",
+        "styling": "bg-transparent border border-white/20 text-white hover:bg-white/5 px-4 py-2 rounded-md font-medium transition-colors",
+        "data_testid": "create-market-button"
+      },
+      "sort_filters": {
+        "role": "Tab / Filter toggles",
+        "styling": "bg-transparent text-secondary-foreground hover:text-white px-3 py-1.5 rounded-md text-sm transition-colors border border-transparent hover:bg-white/5",
+        "active_state": "bg-white/10 text-white border-white/20 rounded-md",
+        "data_testid_prefix": "sort-filter-"
+      }
+    },
+    "badges": {
+      "live_badge": {
+        "text": "Q1 2026 Live",
+        "styling": "inline-flex items-center px-2 py-1 rounded-md text-xs font-bold bg-green-500/10 text-green-500 border border-green-500/20 uppercase tracking-wider",
+        "data_testid": "season-live-badge"
+      }
+    },
+    "search": {
+      "placement": "Inline within the header navigation, next to Nav Links.",
+      "styling": "relative flex items-center bg-white/5 border border-white/10 rounded-md px-3 py-1.5 focus-within:border-primary transition-colors min-w-[240px]",
+      "input_styling": "bg-transparent border-none outline-none text-sm text-white placeholder:text-white/40 w-full ml-2",
+      "data_testid": "header-search-input"
+    }
+  },
+  "instructions_to_main_agent": [
+    "1. Locate the Header component file (e.g., Header.js, Navbar.js).",
+    "2. Move the Search Bar component inside the main Header flex container, placing it after the navigation links (Arena, Duels, etc.) and before the CTA buttons.",
+    "3. Fix the CTA hierarchy: Find the 'Connect Wallet' and 'Create Market' buttons. Change 'Connect Wallet' to use solid primary styling. Change 'Create Market' to use secondary/outline styling.",
+    "4. Enforce geometry: Search globally (or in the relevant components) for 'rounded-full', 'rounded-xl', 'rounded-2xl', 'rounded-3xl' on Buttons, Badges, and Sort Filters. Replace ALL of them with 'rounded-md'.",
+    "5. Specifically update the 'Q1 2026 Live' badge to use 'rounded-md' instead of any pill shape.",
+    "6. Specifically update the Sort By buttons (Trending, Newest, Volume, Most Bets) to use 'rounded-md'.",
+    "7. Ensure all modified interactive elements include the specified data-testid attributes."
+  ]
+}

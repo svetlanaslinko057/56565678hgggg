@@ -1,0 +1,260 @@
+{
+  "summary": {
+    "total_tests": 25,
+    "passed_tests": 23,
+    "success_rate": "92.0%",
+    "timestamp": "2026-03-29T18:25:57.483586"
+  },
+  "results": [
+    {
+      "test": "Backend Health Check",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "status": "ok",
+        "service": "fomo-arena"
+      },
+      "timestamp": "2026-03-29T18:25:55.637945"
+    },
+    {
+      "test": "FOMO Engine Stats",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "activeEvents": 0,
+          "byType": {},
+          "byPriority": {}
+        }
+      },
+      "timestamp": "2026-03-29T18:25:55.811704"
+    },
+    {
+      "test": "FOMO Engine Best Signal",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": null
+      },
+      "timestamp": "2026-03-29T18:25:55.981305"
+    },
+    {
+      "test": "Weekly Competition Data",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "endsIn": 624843878,
+          "yourRank": 1,
+          "yourProfit": 0,
+          "yourPotentialReward": 50,
+          "topUsers": [],
+          "nextRankProfit": null,
+          "isInTop10": true
+        }
+      },
+      "timestamp": "2026-03-29T18:25:56.141746"
+    },
+    {
+      "test": "Weekly Competition Data Structure",
+      "success": true,
+      "details": "All required fields present",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.142391"
+    },
+    {
+      "test": "Weekly Competition Top Users",
+      "success": false,
+      "details": "No top users found",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.142412"
+    },
+    {
+      "test": "Rival Pressure Data",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": []
+      },
+      "timestamp": "2026-03-29T18:25:56.334377"
+    },
+    {
+      "test": "Rival Pressure Data Structure",
+      "success": true,
+      "details": "Found 0 rivals",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.335113"
+    },
+    {
+      "test": "Deep Link - market",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "deepLink": "https://t.me/FOMOArenaBot?startapp=market_test_market_123"
+        }
+      },
+      "timestamp": "2026-03-29T18:25:56.494551"
+    },
+    {
+      "test": "Deep Link market Format",
+      "success": true,
+      "details": "Valid Telegram link: https://t.me/FOMOArenaBot?startapp=market_test_market_123",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.495177"
+    },
+    {
+      "test": "Deep Link - rival",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "deepLink": "https://t.me/FOMOArenaBot?startapp=rival_98765432"
+        }
+      },
+      "timestamp": "2026-03-29T18:25:56.619245"
+    },
+    {
+      "test": "Deep Link rival Format",
+      "success": true,
+      "details": "Valid Telegram link: https://t.me/FOMOArenaBot?startapp=rival_98765432",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.619979"
+    },
+    {
+      "test": "Deep Link - win",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "deepLink": "https://t.me/FOMOArenaBot?startapp=win_win_share_123"
+        }
+      },
+      "timestamp": "2026-03-29T18:25:56.744210"
+    },
+    {
+      "test": "Deep Link win Format",
+      "success": true,
+      "details": "Valid Telegram link: https://t.me/FOMOArenaBot?startapp=win_win_share_123",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.744894"
+    },
+    {
+      "test": "Deep Link - leaderboard",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "deepLink": "https://t.me/FOMOArenaBot?startapp=leaderboard"
+        }
+      },
+      "timestamp": "2026-03-29T18:25:56.874918"
+    },
+    {
+      "test": "Deep Link leaderboard Format",
+      "success": true,
+      "details": "Valid Telegram link: https://t.me/FOMOArenaBot?startapp=leaderboard",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:56.875606"
+    },
+    {
+      "test": "Deep Link - referral",
+      "success": true,
+      "details": "Status: 200 (expected 200)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "deepLink": "https://t.me/FOMOArenaBot?startapp=ref_12345678"
+        }
+      },
+      "timestamp": "2026-03-29T18:25:57.055168"
+    },
+    {
+      "test": "Deep Link referral Format",
+      "success": true,
+      "details": "Valid Telegram link: https://t.me/FOMOArenaBot?startapp=ref_12345678",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:57.055801"
+    },
+    {
+      "test": "Win Card Generation",
+      "success": true,
+      "details": "Status: 201 (expected 201)",
+      "response_data": {
+        "success": true,
+        "data": {
+          "profit": 150.75,
+          "roi": 301.5,
+          "badges": [
+            "2x_winner",
+            "3x_winner",
+            "centurion"
+          ],
+          "achievements": [
+            "Top 1 this week"
+          ],
+          "streak": 0,
+          "rivalBeaten": null,
+          "leaderboardPosition": 1,
+          "shareMessage": "\ud83c\udf89 +$151 on FOMO Arena!\n\n\ud83d\udd25 Top 1 this week\n\n\ud83d\udcb0 Predict. Bet. Win.\n\ud83d\udc49 Join the arena:",
+          "deepLink": "https://t.me/FOMOArenaBot?startapp=ref_12345678"
+        }
+      },
+      "timestamp": "2026-03-29T18:25:57.224369"
+    },
+    {
+      "test": "Win Card Data Structure",
+      "success": true,
+      "details": "All required fields present",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:57.225015"
+    },
+    {
+      "test": "Win Card ROI Calculation",
+      "success": false,
+      "details": "ROI mismatch: expected 201.5, got 301.5",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:57.225043"
+    },
+    {
+      "test": "Win Card Badges",
+      "success": true,
+      "details": "Generated 3 badges: ['2x_winner', '3x_winner', 'centurion']",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:57.225053"
+    },
+    {
+      "test": "Win Card Achievements",
+      "success": true,
+      "details": "Generated 1 achievements: ['Top 1 this week']",
+      "response_data": null,
+      "timestamp": "2026-03-29T18:25:57.225059"
+    },
+    {
+      "test": "Rival Pressure Notification",
+      "success": true,
+      "details": "Status: 201 (expected 201)",
+      "response_data": {
+        "success": true
+      },
+      "timestamp": "2026-03-29T18:25:57.352761"
+    },
+    {
+      "test": "Weekly Pressure Notification",
+      "success": true,
+      "details": "Status: 201 (expected 201)",
+      "response_data": {
+        "success": true
+      },
+      "timestamp": "2026-03-29T18:25:57.482629"
+    }
+  ]
+}

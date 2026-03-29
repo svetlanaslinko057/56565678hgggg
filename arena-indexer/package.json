@@ -1,0 +1,22 @@
+{
+  "name": "arena-indexer",
+  "version": "1.0.0",
+  "description": "FOMO Arena Blockchain Event Indexer",
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "ts-node src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "backfill": "ts-node src/backfill.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.0",
+    "mongoose": "^8.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
