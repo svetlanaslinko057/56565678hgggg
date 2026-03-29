@@ -27,6 +27,7 @@ export interface MarketFomo {
 
 export interface MarketCard {
   id: string;
+  onchainId?: number;  // On-chain market ID
   title: string;
   yesPercent: number;
   noPercent: number;
@@ -44,6 +45,7 @@ export interface MarketCard {
 
 export interface BetSheetData {
   marketId: string;
+  onchainId?: number;  // On-chain market ID for contract calls
   marketTitle: string;
   side: 'YES' | 'NO';
   odds: number;
@@ -171,6 +173,7 @@ export function transformMarket(apiMarket: any): MarketCard {
   
   return {
     id: apiMarket._id || apiMarket.id || String(Math.random()),
+    onchainId: apiMarket.onchainId || apiMarket.chainMarketId,
     title: apiMarket.question || apiMarket.title || 'Unknown Market',
     yesPercent,
     noPercent,

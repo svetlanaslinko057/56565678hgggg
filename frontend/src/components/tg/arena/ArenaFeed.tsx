@@ -269,9 +269,10 @@ export function ArenaFeed() {
     setBetSheetData(data);
   };
 
-  const handlePlaceBet = async (marketId: string, side: 'YES' | 'NO', amount: number) => {
-    console.log('Placing bet:', { marketId, side, amount });
-    alert(`Bet placed: $${amount} on ${side}\n\nWallet connection required in production.`);
+  const handleBetPlaced = (txHash: string, tokenId: number) => {
+    console.log('Bet placed successfully:', { txHash, tokenId });
+    // Refresh markets after bet
+    fetchMarkets();
   };
 
   const handleBestEdgeBet = () => {
@@ -279,6 +280,7 @@ export function ArenaFeed() {
     const side = bestEdgeMarket.ai.edge > 0 ? 'YES' : 'NO';
     handleBet({
       marketId: bestEdgeMarket.id,
+      onchainId: bestEdgeMarket.onchainId,
       marketTitle: bestEdgeMarket.title,
       side: side as 'YES' | 'NO',
       odds: side === 'YES' ? bestEdgeMarket.yesOdds : bestEdgeMarket.noOdds,
@@ -397,7 +399,7 @@ export function ArenaFeed() {
         isOpen={!!betSheetData}
         data={betSheetData}
         onClose={() => setBetSheetData(null)}
-        onPlaceBet={handlePlaceBet}
+        onBetPlaced={handleBetPlaced}
       />
     </Container>
   );

@@ -252,6 +252,7 @@ export function MarketCard({ market, onBet, isBestEdge = false }: MarketCardProp
   const handleBet = (side: 'YES' | 'NO') => {
     onBet({
       marketId: market.id,
+      onchainId: market.onchainId,
       marketTitle: market.title,
       side,
       odds: side === 'YES' ? market.yesOdds : market.noOdds,

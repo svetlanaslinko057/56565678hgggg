@@ -1,6 +1,4 @@
 {
   "/page": "app/page.js",
-  "/tg/page": "app/tg/page.js",
-  "/tg/arena/page": "app/tg/arena/page.js",
-  "/tg/profile/page": "app/tg/profile/page.js"
+  "/tg/arena/page": "app/tg/arena/page.js"
 }
