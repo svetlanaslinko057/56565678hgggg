@@ -38,7 +38,8 @@ BSC Testnet (Smart Contract: 0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e)
 - Real-time indexer sync
 
 ## What's Been Implemented
-### Date: 2026-03-29
+
+### Date: 2026-03-29 - Initial Deployment
 - [x] Repository cloned and deployed from GitHub
 - [x] Next.js 14 frontend running (port 3000)
 - [x] FastAPI proxy running (port 8001)
@@ -49,6 +50,22 @@ BSC Testnet (Smart Contract: 0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e)
 - [x] Telegram Mini App version (/tg routes)
 - [x] Profile, Arena, Duels, Leaderboard pages
 - [x] Environment files configured
+
+### Date: 2026-03-29 - PHASE 2: REAL BET FLOW
+- [x] BetSheet completely rewritten with contract integration
+- [x] TX State Machine implemented:
+  - idle → checking → approving → approved → betting → success → error
+- [x] Allowance check before betting
+- [x] Approve USDT flow (ERC20 approve)
+- [x] placeBet() via smart contract
+- [x] Success state with txHash and BSCScan explorer link
+- [x] Error handling with user-friendly messages
+- [x] Telegram haptic feedback integration
+- [x] WalletConnect FIRST in wallet selector (Telegram priority)
+- [x] Amount presets ($10, $25, $50, $100)
+- [x] Custom amount input
+- [x] Payout preview with odds calculation
+- [x] Balance display when wallet connected
 
 ## Contract Info
 | Parameter | Value |
@@ -61,21 +78,29 @@ BSC Testnet (Smart Contract: 0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e)
 | Platform Fee | 2% |
 
 ## Test Results (2026-03-29)
-- Backend: 92% passed (12/13)
+### PHASE 1 - Deployment
+- Backend: 92% passed
 - Frontend: 100% passed
 - Overall: 96%
+
+### PHASE 2 - Real Bet Flow
+- Backend: 70% (no test markets in DB)
+- Frontend: 90%
+- Wallet Integration: 95%
+- BetSheet Implementation: 100%
 
 ## Prioritized Backlog
 
 ### P0 - Critical (Next Phase)
-1. **REAL BET FLOW** - Connect UI to actual contract calls (approve + bet)
-2. **Indexer → UI sync** - Markets from blockchain, not mock data
-3. **WalletConnect Allowlist** - Add domain to cloud.reown.com
+1. **PHASE 3: INDEXER SYNC** - tx → DB → UI → positions
+2. Create test markets for full flow validation
+3. Claim rewards flow
 
 ### P1 - Important
-1. Claim rewards flow
+1. WalletConnect Allowlist - Add domain to cloud.reown.com
 2. Market resolution via oracle
 3. Transaction history
+4. Remove mock data when real markets exist
 
 ### P2 - Nice to Have
 1. XP system integration
@@ -83,10 +108,10 @@ BSC Testnet (Smart Contract: 0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e)
 3. Social sharing
 
 ## Next Tasks
-1. Implement real contract calls (approve USDT + placeBet)
-2. Test full betting flow in Telegram
-3. Verify indexer syncs blockchain events to UI
-4. Add domain to WalletConnect Allowlist
+1. Create test markets in database
+2. Verify complete betting flow with real wallet
+3. Test indexer syncs BetPlaced events
+4. Implement claim flow
 
 ## Services Status
 | Service | Port | Status |
