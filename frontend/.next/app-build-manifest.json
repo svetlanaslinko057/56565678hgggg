@@ -11,6 +11,18 @@
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
+    ],
+    "/tg/arena/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/tg/arena/page.css",
+      "static/chunks/app/tg/arena/page.js"
+    ],
+    "/tg/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/tg/layout.css",
+      "static/chunks/app/tg/layout.js"
     ]
   }
 }

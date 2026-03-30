@@ -9,6 +9,7 @@ import { MarketCard } from './MarketCard';
 import { FilterChips, FilterType } from './FilterChips';
 import { BetSheet } from './BetSheet';
 import { getTelegramWebApp } from '@/lib/telegram';
+import { LiveActivityTicker } from '@/components/arena/LiveActivityTicker';
 
 const pulse = keyframes`
   0%, 100% { opacity: 1; transform: scale(1); }
@@ -401,6 +402,9 @@ export function ArenaFeed() {
         onClose={() => setBetSheetData(null)}
         onBetPlaced={handleBetPlaced}
       />
+
+      {/* Live Activity Ticker */}
+      <LiveActivityTicker />
     </Container>
   );
 }

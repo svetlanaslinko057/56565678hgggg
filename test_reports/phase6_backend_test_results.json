@@ -1,163 +1,109 @@
 {
-  "timestamp": "2026-03-30T08:28:07.352912",
+  "timestamp": "2026-03-30T08:32:37.421970",
   "phase": "PHASE 6 - REAL-TIME ADDICTION ENGINE",
   "summary": {
-    "tests_run": 20,
-    "tests_passed": 12,
-    "tests_failed": 8,
-    "success_rate": "60.0%",
-    "critical_features_passed": "5/5",
-    "websocket_connected": false,
-    "websocket_messages_received": 0
+    "tests_run": 13,
+    "tests_passed": 8,
+    "tests_failed": 5,
+    "success_rate": "61.5%"
   },
   "failed_tests": [
     {
-      "name": "Track Notification Click",
+      "name": "Watch Market",
       "expected": 200,
-      "actual": 500,
-      "response": "{\"success\":false,\"statusCode\":500,\"error\":\"Error\",\"message\":\"Cast to ObjectId failed for value \\\"notif_123\\\" (type string) at path \\\"_id\\\" for model \\\"PushNotificationLog\\\"\",\"timestamp\":\"2026-03-30T08"
+      "actual": 201,
+      "response": "{\"success\":true,\"message\":\"Market added to watchlist\"}"
     },
     {
-      "name": "Send Test Notification",
+      "name": "Watch Rival",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"message\":\"Rival added to watchlist\"}"
+    },
+    {
+      "name": "Link Telegram",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"message\":\"Telegram linked\"}"
+    },
+    {
+      "name": "Test Push Notification",
       "expected": 200,
       "actual": 201,
       "response": "{\"success\":true,\"message\":\"Sent\"}"
     },
     {
-      "name": "WebSocket Connection",
-      "error": "Failed to connect"
-    },
-    {
-      "name": "Get Markets",
+      "name": "Get Activity Feed",
       "expected": 200,
       "actual": 404,
-      "response": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Cannot GET /api/markets\",\"timestamp\":\"2026-03-30T08:28:04.940Z\"}"
-    },
-    {
-      "name": "Rate Limit Test 1",
-      "expected": 200,
-      "actual": 201,
-      "response": "{\"success\":true,\"message\":\"Sent\"}"
-    },
-    {
-      "name": "Rate Limit Test 2",
-      "expected": 200,
-      "actual": 201,
-      "response": "{\"success\":true,\"message\":\"Sent\"}"
-    },
-    {
-      "name": "Rate Limit Test 3",
-      "expected": 200,
-      "actual": 201,
-      "response": "{\"success\":true,\"message\":\"Sent\"}"
-    },
-    {
-      "name": "Deep Link Handler",
-      "expected": 200,
-      "actual": 404,
-      "response": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Cannot GET /api/deeplink/market/market_123\",\"timestamp\":\"2026-03-30T08:28:07.335Z\"}"
+      "response": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Cannot GET /api/activity?limit=20\",\"timestamp\":\"2026-03-30T08:32:37.306Z\"}"
     }
   ],
   "detailed_results": {
-    "Health Check": {
+    "Get Push Subscriptions": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"status\":\"ok\",\"service\":\"fomo-arena\"}"
-    },
-    "Live Activity Stats": {
-      "status": "PASSED",
-      "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"connectedUsers\":0,\"betsLastMinute\":0,\"recentActivity\":[]}}"
-    },
-    "Get User Subscriptions": {
-      "status": "PASSED",
-      "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"telegramId\":\"***linked***\",\"watchlistMarkets\":[],\"watchlistRivals\":[\"0x9876543210987654321098765432109876543210\"],\"settings\":{\"edgeAlerts\":true,\"whaleAlerts\":true,\"closingAlerts\":true,\"winAlerts\":true,\"rivalAlerts\":true,\"maxDailyNotifications\":5,\"edgeThreshold\":10,\"whaleThreshold\":100},\"notificationsSentToday\":0,\"isActive\":true}}"
+      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"telegramId\":\"***linked***\",\"watchlistMarkets\":[],\"watchlistRivals\":[\"0x9876543210987654321098765432109876543210\"],\"settings\":{\"edgeAlerts\":true,\"whaleAlerts\":true,\"closingAlerts\":true,\"winAlerts\":true,\"rivalAlerts\":true,\"maxDailyNotifications\":5,\"edgeThreshold\":10,\"whaleThreshold\":100},\"notificationsSentToday\":4,\"isActive\":true}}"
     },
     "Update Notification Settings": {
       "status": "PASSED",
       "response_code": 200,
       "response_data": "{\"success\":true,\"message\":\"Settings updated\"}"
     },
-    "Add Market to Watchlist": {
-      "status": "PASSED",
+    "Watch Market": {
+      "status": "FAILED",
       "response_code": 201,
-      "response_data": "{\"success\":true,\"message\":\"Market added to watchlist\"}"
+      "error": "{\"success\":true,\"message\":\"Market added to watchlist\"}"
     },
-    "Add Rival to Watchlist": {
-      "status": "PASSED",
+    "Watch Rival": {
+      "status": "FAILED",
       "response_code": 201,
-      "response_data": "{\"success\":true,\"message\":\"Rival added to watchlist\"}"
+      "error": "{\"success\":true,\"message\":\"Rival added to watchlist\"}"
     },
-    "Remove Market from Watchlist": {
-      "status": "PASSED",
-      "response_code": 200,
-      "response_data": "{\"success\":true,\"message\":\"Market removed from watchlist\"}"
-    },
-    "Link Telegram ID": {
-      "status": "PASSED",
+    "Link Telegram": {
+      "status": "FAILED",
       "response_code": 201,
-      "response_data": "{\"success\":true,\"message\":\"Telegram linked\"}"
+      "error": "{\"success\":true,\"message\":\"Telegram linked\"}"
     },
     "Get Notification Stats": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"sent\":0,\"clicked\":0,\"clickRate\":0}}"
+      "response_data": "{\"success\":true,\"data\":{\"sent\":4,\"clicked\":0,\"clickRate\":0}}"
     },
-    "Track Notification Click": {
-      "status": "FAILED",
-      "response_code": 500,
-      "error": "{\"success\":false,\"statusCode\":500,\"error\":\"Error\",\"message\":\"Cast to ObjectId failed for value \\\"notif_123\\\" (type string) at path \\\"_id\\\" for model \\\"PushNotificationLog\\\"\",\"timestamp\":\"2026-03-30T08"
-    },
-    "Send Test Notification": {
+    "Test Push Notification": {
       "status": "FAILED",
       "response_code": 201,
       "error": "{\"success\":true,\"message\":\"Sent\"}"
     },
-    "WebSocket Connection": {
-      "status": "FAILED",
-      "error": "Failed to connect"
-    },
-    "Get Markets": {
-      "status": "FAILED",
-      "response_code": 404,
-      "error": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Cannot GET /api/markets\",\"timestamp\":\"2026-03-30T08:28:04.940Z\"}"
+    "Get Live Activity Stats": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"connectedUsers\":0,\"betsLastMinute\":0,\"recentActivity\":[]}}"
     },
     "Get Onchain Markets": {
       "status": "PASSED",
       "response_code": 200,
       "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
     },
-    "Get Positions": {
+    "Get Onchain Positions": {
       "status": "PASSED",
       "response_code": 200,
       "response_data": "{\"success\":true,\"data\":[]}"
     },
-    "Get Leaderboard": {
+    "Get Notifications": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
+      "response_data": "{\"success\":true,\"data\":{\"data\":[],\"hasMore\":false}}"
     },
-    "Rate Limit Test 1": {
-      "status": "FAILED",
-      "response_code": 201,
-      "error": "{\"success\":true,\"message\":\"Sent\"}"
-    },
-    "Rate Limit Test 2": {
-      "status": "FAILED",
-      "response_code": 201,
-      "error": "{\"success\":true,\"message\":\"Sent\"}"
-    },
-    "Rate Limit Test 3": {
-      "status": "FAILED",
-      "response_code": 201,
-      "error": "{\"success\":true,\"message\":\"Sent\"}"
-    },
-    "Deep Link Handler": {
+    "Get Activity Feed": {
       "status": "FAILED",
       "response_code": 404,
-      "error": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Cannot GET /api/deeplink/market/market_123\",\"timestamp\":\"2026-03-30T08:28:07.335Z\"}"
+      "error": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Cannot GET /api/activity?limit=20\",\"timestamp\":\"2026-03-30T08:32:37.306Z\"}"
+    },
+    "Health Check": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"status\":\"ok\",\"service\":\"fomo-arena\"}"
     }
-  },
-  "websocket_messages": []
+  }
 }

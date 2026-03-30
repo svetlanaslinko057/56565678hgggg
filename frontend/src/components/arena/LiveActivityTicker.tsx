@@ -210,7 +210,7 @@ export const LiveActivityTicker: React.FC = () => {
 
     // Duplicate items for seamless scroll
     setTickerItems([...items, ...items]);
-  }, [activities]);
+  }, [activities.length]);
 
   if (tickerItems.length === 0) {
     return null;

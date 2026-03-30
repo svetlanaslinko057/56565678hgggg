@@ -24,13 +24,14 @@ import {
   NotificationStats,
   StatItem,
 } from "./NotificationsPanel.styles";
-import { X, Check } from "lucide-react";
+import { X, Check, Settings } from "lucide-react";
 import SwordsIcon from "@/global/Icons/Swords";
 import ArenaTabIcon from "@/global/Icons/ArenaTabIcon";
 import { DuelChallengeModal } from "../duel-challenge-modal/DuelChallengeModal";
 import { PredictionDetailsModal } from "../prediction-details-modal/PredictionDetailsModal";
 import { NotificationsAPI } from "@/lib/api/arena";
 import { useArena } from "@/lib/api/ArenaContext";
+import { NotificationSettingsPanel } from "../NotificationSettingsPanel";
 
 interface Notification {
   id: string;
@@ -184,9 +185,10 @@ export const NotificationsPanelComponent: React.FC<NotificationsPanelProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { refreshNotifications, isConnected } = useArena();
+  const { refreshNotifications, isConnected, wallet } = useArena();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
   const [isChallengeModalOpen, setIsChallengeModalOpen] = useState(false);
   const [selectedChallenge, setSelectedChallenge] = useState<Notification["challenge"] | null>(null);
   const [isPredictionModalOpen, setIsPredictionModalOpen] = useState(false);
@@ -339,10 +341,35 @@ export const NotificationsPanelComponent: React.FC<NotificationsPanelProps> = ({
           <NotificationsOverlay onClick={onClose} />
           <NotificationsPanel id="notifications-panel">
             <NotificationsHeader>
-              <NotificationsTitle>Notifications</NotificationsTitle>
-              <MarkAllReadButton onClick={markAllAsRead}>Mark all read</MarkAllReadButton>
+              <NotificationsTitle>
+                {showSettings ? 'Notification Settings' : 'Notifications'}
+              </NotificationsTitle>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <button 
+                  onClick={() => setShowSettings(!showSettings)}
+                  style={{ 
+                    background: 'none', 
+                    border: 'none', 
+                    cursor: 'pointer', 
+                    padding: '4px',
+                    color: showSettings ? '#00c8ff' : '#738094'
+                  }}
+                  data-testid="notification-settings-toggle"
+                >
+                  <Settings size={18} />
+                </button>
+                {!showSettings && <MarkAllReadButton onClick={markAllAsRead}>Mark all read</MarkAllReadButton>}
+              </div>
             </NotificationsHeader>
 
+            {showSettings ? (
+              <div style={{ padding: '16px' }}>
+                <NotificationSettingsPanel 
+                  wallet={wallet || ''} 
+                  onSave={() => setShowSettings(false)}
+                />
+              </div>
+            ) : (
             <NotificationsList>
               {loading ? (
                 <div style={{ padding: 20, textAlign: "center", color: "#738094" }}>
@@ -449,8 +476,9 @@ export const NotificationsPanelComponent: React.FC<NotificationsPanelProps> = ({
                 ))
               )}
             </NotificationsList>
+            )}
 
-            <ClearAllButton>Clear all notifications</ClearAllButton>
+            {!showSettings && <ClearAllButton>Clear all notifications</ClearAllButton>}
           </NotificationsPanel>
         </>
       )}

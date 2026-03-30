@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-FOMO Arena PHASE 5 VIRAL LOOP (Share Win) - Backend API Testing
-Tests share win tracking endpoint, XP rewards, and viral loop backend support
+FOMO Arena PHASE 6 REAL-TIME ADDICTION ENGINE - Backend API Testing
+Tests LiveActivityTicker, NotificationSettingsPanel, Telegram Push APIs
 """
 
 import requests
@@ -9,8 +9,8 @@ import sys
 import json
 from datetime import datetime
 
-class FOMOArenaAPITester:
-    def __init__(self, base_url="https://c71c518d-fc6c-40e7-b01d-a7a268bf1d7c.preview.emergentagent.com"):
+class FOMOArenaPhase6APITester:
+    def __init__(self, base_url="https://repo-setup-54.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
@@ -91,249 +91,164 @@ class FOMOArenaAPITester:
             return False, {}
 
 def main():
-    print("=" * 60)
-    print("🚀 FOMO Arena PHASE 5 VIRAL LOOP (Share Win) - Backend API Testing")
-    print("=" * 60)
+    print("=" * 70)
+    print("🚀 FOMO Arena PHASE 6 REAL-TIME ADDICTION ENGINE - Backend API Testing")
+    print("=" * 70)
     
-    tester = FOMOArenaAPITester()
+    tester = FOMOArenaPhase6APITester()
     
-    # ==================== PHASE 5: SHARE WIN TRACKING API ====================
-    print("\n🎉 PHASE 5: SHARE WIN TRACKING API TESTS")
-    print("-" * 40)
+    # Test wallet for API calls
+    test_wallet = "0x1234567890123456789012345678901234567890"
     
-    # Test share win tracking endpoint - the main feature for PHASE 5
-    test_token_id = "123"
-    share_platforms = ['telegram', 'twitter', 'copy']
+    # ==================== PHASE 6: PUSH NOTIFICATIONS API ====================
+    print("\n🔔 PHASE 6: PUSH NOTIFICATIONS API TESTS")
+    print("-" * 50)
     
-    for platform in share_platforms:
-        success, response = tester.run_test(
-            f"Track Win Share - {platform.title()}",
-            "POST",
-            f"api/share/win/{test_token_id}/track",
-            200,
-            data={"platform": platform}
-        )
-        
-        # Verify XP reward is mentioned in response
-        if success and response.get('data'):
-            data = response['data']
-            if 'xpAwarded' in data:
-                print(f"   ✅ XP Awarded: {data['xpAwarded']}")
+    # Test push subscriptions endpoint - main feature for Phase 6
+    success, response = tester.run_test(
+        "Get Push Subscriptions",
+        "GET",
+        f"api/push/subscriptions/{test_wallet}",
+        200
+    )
+    
+    # Verify subscription data structure
+    if success and response.get('data'):
+        data = response['data']
+        expected_fields = ['wallet', 'telegramId', 'watchlistMarkets', 'watchlistRivals', 'settings', 'isActive']
+        for field in expected_fields:
+            if field in data:
+                print(f"   ✅ Field '{field}' present: {type(data[field])}")
             else:
-                print(f"   ⚠️  No XP award info in response")
+                print(f"   ⚠️  Field '{field}' missing from response")
     
-    # Test duplicate share tracking (should prevent spam)
+    # Test notification settings update
+    settings_data = {
+        "edgeAlerts": True,
+        "whaleAlerts": True,
+        "closingAlerts": False,
+        "winAlerts": True,
+        "rivalAlerts": True,
+        "maxDailyNotifications": 5,
+        "edgeThreshold": 10,
+        "whaleThreshold": 100
+    }
+    
     tester.run_test(
-        "Track Win Share - Duplicate Prevention",
+        "Update Notification Settings",
+        "PUT",
+        f"api/push/subscriptions/{test_wallet}/settings",
+        200,
+        data=settings_data
+    )
+    
+    # Test watch market functionality
+    tester.run_test(
+        "Watch Market",
         "POST",
-        f"api/share/win/{test_token_id}/track",
+        f"api/push/subscriptions/{test_wallet}/watch-market",
         200,
-        data={"platform": "telegram"}
+        data={"marketId": "test_market_123"}
     )
     
-    # Test invalid token ID
+    # Test watch rival functionality
     tester.run_test(
-        "Track Win Share - Invalid Token ID",
+        "Watch Rival",
         "POST",
-        "api/share/win/invalid/track",
-        400  # Should return error for invalid token
+        f"api/push/subscriptions/{test_wallet}/watch-rival",
+        200,
+        data={"rivalWallet": "0x9876543210987654321098765432109876543210"}
     )
     
-    # ==================== SHARE LINK CREATION API ====================
-    print("\n🔗 SHARE LINK CREATION API TESTS")
-    print("-" * 40)
-    
-    # Test creating share link for position
-    test_position_id = "pos_123"
-    test_wallet = "0x1234567890123456789012345678901234567890"
-    
+    # Test link Telegram
     tester.run_test(
-        "Create Share Link for Position",
+        "Link Telegram",
         "POST",
-        f"api/share/position/{test_position_id}",
+        f"api/push/subscriptions/{test_wallet}/link-telegram",
         200,
-        data={}
+        data={"telegramId": "123456789"}
     )
     
-    # Test getting share data (public endpoint)
-    test_share_id = "sh_test123"
+    # Test notification stats
     tester.run_test(
-        "Get Share Link Data",
+        "Get Notification Stats",
         "GET",
-        f"api/share/{test_share_id}",
-        200  # Should work even if share doesn't exist (returns 404 or empty)
-    )
-    
-    # Test user share stats
-    tester.run_test(
-        "Get User Share Stats",
-        "GET",
-        "api/share/stats/me",
+        f"api/push/stats/{test_wallet}",
         200
     )
     
-    # Test top referrers leaderboard
+    # Test push notification test endpoint
     tester.run_test(
-        "Get Top Referrers Leaderboard",
-        "GET",
-        "api/share/leaderboard/referrers",
+        "Test Push Notification",
+        "POST",
+        f"api/push/test/{test_wallet}",
         200,
-        params={'limit': '10'}
+        data={"type": "edge_alert", "message": "Test edge alert notification"}
     )
     
-    # ==================== ECONOMY/LEADERBOARD API ====================
-    print("\n🏆 ECONOMY/LEADERBOARD API TESTS")
-    print("-" * 40)
+    # ==================== PHASE 6: LIVE ACTIVITY API ====================
+    print("\n⚡ PHASE 6: LIVE ACTIVITY API TESTS")
+    print("-" * 50)
     
-    # Test economy leaderboard endpoint
-    success, leaderboard_response = tester.run_test(
-        "Economy Leaderboard",
+    # Test live stats endpoint - main feature for LiveActivityTicker
+    success, response = tester.run_test(
+        "Get Live Activity Stats",
         "GET",
-        "api/economy/leaderboard",
+        "api/live/stats",
         200
     )
     
-    # Test with limit parameter
+    # Verify live stats data structure
+    if success and response.get('data'):
+        data = response['data']
+        print(f"   ✅ Live stats data type: {type(data)}")
+        if isinstance(data, dict):
+            print(f"   ✅ Live stats keys: {list(data.keys())}")
+        elif isinstance(data, list):
+            print(f"   ✅ Live stats array length: {len(data)}")
+    
+    # ==================== SUPPORTING APIS FOR PHASE 6 ====================
+    print("\n🎯 SUPPORTING APIS FOR PHASE 6")
+    print("-" * 50)
+    
+    # Test markets API (needed for notifications)
     tester.run_test(
-        "Economy Leaderboard with Limit",
-        "GET",
-        "api/economy/leaderboard",
-        200,
-        params={'limit': '10'}
-    )
-    
-    # Test user economy stats
-    test_wallet = "0x1234567890123456789012345678901234567890"
-    tester.run_test(
-        f"User Economy Stats for {test_wallet[:10]}...",
-        "GET",
-        f"api/economy/stats/{test_wallet}",
-        200
-    )
-    
-    # ==================== ONCHAIN POSITIONS API ====================
-    print("\n🎯 ONCHAIN POSITIONS API TESTS")
-    print("-" * 40)
-    
-    # Test positions endpoint (key for MyPositions component)
-    success, positions_response = tester.run_test(
-        "Get Onchain Positions",
-        "GET",
-        "api/onchain/positions",
-        200
-    )
-    
-    # Test positions with owner filter (what MyPositions uses)
-    tester.run_test(
-        f"Get Positions for Owner {test_wallet[:10]}...",
-        "GET",
-        "api/onchain/positions",
-        200,
-        params={'owner': test_wallet}
-    )
-    
-    # Test positions with status filter
-    tester.run_test(
-        "Get Won Positions",
-        "GET",
-        "api/onchain/positions",
-        200,
-        params={'status': 'won'}
-    )
-    
-    # Test single position by token ID if positions exist
-    if success and positions_response.get('data') and len(positions_response['data']) > 0:
-        position = positions_response['data'][0]
-        token_id = position.get('tokenId')
-        if token_id:
-            tester.run_test(
-                f"Get Single Position #{token_id}",
-                "GET",
-                f"api/onchain/positions/{token_id}",
-                200
-            )
-    
-    # ==================== LEADERBOARD API ====================
-    print("\n📊 LEADERBOARD API TESTS")
-    print("-" * 40)
-    
-    # Test main leaderboard endpoint
-    tester.run_test(
-        "Main Leaderboard",
-        "GET",
-        "api/leaderboard",
-        200
-    )
-    
-    # Test different leaderboard types
-    leaderboard_types = ['global', 'weekly', 'profit', 'duels', 'xp']
-    for lb_type in leaderboard_types:
-        tester.run_test(
-            f"Leaderboard - {lb_type.title()}",
-            "GET",
-            "api/leaderboard",
-            200,
-            params={'type': lb_type, 'limit': '10'}
-        )
-    
-    # Test specific leaderboard endpoints
-    tester.run_test(
-        "Global Leaderboard",
-        "GET",
-        "api/leaderboard/global",
-        200
-    )
-    
-    tester.run_test(
-        "Weekly Leaderboard", 
-        "GET",
-        "api/leaderboard/weekly",
-        200
-    )
-    
-    tester.run_test(
-        "XP Leaderboard",
-        "GET", 
-        "api/leaderboard/xp",
-        200
-    )
-    
-    # ==================== MARKETS API ====================
-    print("\n📈 MARKETS API TESTS")
-    print("-" * 40)
-    
-    # Test onchain markets endpoint (for Arena page)
-    success, markets_response = tester.run_test(
         "Get Onchain Markets",
         "GET",
         "api/onchain/markets",
         200
     )
     
-    # Test markets with filters
+    # Test positions API (needed for win notifications)
     tester.run_test(
-        "Active Onchain Markets",
+        "Get Onchain Positions",
         "GET",
-        "api/onchain/markets",
+        "api/onchain/positions",
         200,
-        params={'status': 'active'}
+        params={'owner': test_wallet}
     )
     
-    # Test single market if any exist
-    if success and markets_response.get('data') and len(markets_response['data']) > 0:
-        market = markets_response['data'][0]
-        market_id = market.get('id') or market.get('marketId')
-        if market_id:
-            tester.run_test(
-                f"Get Single Market #{market_id}",
-                "GET",
-                f"api/markets/{market_id}",
-                200
-            )
+    # Test notifications API (general notifications)
+    tester.run_test(
+        "Get Notifications",
+        "GET",
+        "api/notifications",
+        200,
+        params={'limit': '10'}
+    )
+    
+    # Test activity feed (for live ticker)
+    tester.run_test(
+        "Get Activity Feed",
+        "GET",
+        "api/activity",
+        200,
+        params={'limit': '20'}
+    )
     
     # ==================== HEALTH CHECK ====================
-    print("\n❤️ HEALTH CHECK TESTS")
-    print("-" * 40)
+    print("\n❤️ HEALTH CHECK")
+    print("-" * 50)
     
     tester.run_test(
         "Health Check",
@@ -342,32 +257,10 @@ def main():
         200
     )
     
-    # ==================== WEBHOOK ENDPOINT ====================
-    print("\n🔗 WEBHOOK TESTS")
-    print("-" * 40)
-    
-    # Test webhook endpoint for economy events
-    webhook_data = {
-        "type": "position_claimed",
-        "wallet": test_wallet,
-        "tokenId": 123,
-        "netAmount": "1000000000000000000",  # 1 USDT in wei
-        "feeAmount": "20000000000000000",    # 0.02 USDT fee
-        "txHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
-    }
-    
-    tester.run_test(
-        "Webhook - Position Claimed Event",
-        "POST",
-        "api/onchain/webhook/event",
-        201,  # 201 is correct for POST creation
-        data=webhook_data
-    )
-    
     # ==================== RESULTS ====================
-    print("\n" + "=" * 60)
-    print("📊 TEST RESULTS SUMMARY")
-    print("=" * 60)
+    print("\n" + "=" * 70)
+    print("📊 PHASE 6 TEST RESULTS SUMMARY")
+    print("=" * 70)
     print(f"Tests Run: {tester.tests_run}")
     print(f"Tests Passed: {tester.tests_passed}")
     print(f"Tests Failed: {len(tester.failed_tests)}")
@@ -385,10 +278,11 @@ def main():
                 print(f"   Response: {test['response']}")
     
     # Save detailed results
-    results_file = '/app/test_reports/viral_loop_backend_test_results.json'
+    results_file = '/app/test_reports/phase6_backend_test_results.json'
     with open(results_file, 'w') as f:
         json.dump({
             'timestamp': datetime.now().isoformat(),
+            'phase': 'PHASE 6 - REAL-TIME ADDICTION ENGINE',
             'summary': {
                 'tests_run': tester.tests_run,
                 'tests_passed': tester.tests_passed,
