@@ -1,0 +1,99 @@
+{
+  "summary": "Completed Phase 6 Real-Time Addiction Engine testing - Backend APIs mostly functional, frontend components not fully integrated",
+  "backend_issues": {
+    "critical_bugs": [
+      {
+        "endpoint": "/api/push/track-click/:notificationId",
+        "issue": "ObjectId validation error - requires valid MongoDB ObjectId format",
+        "impact": "Cannot track notification clicks with simple string IDs",
+        "fix_priority": "MEDIUM"
+      }
+    ],
+    "missing_endpoints": [
+      {
+        "endpoint": "/api/markets",
+        "issue": "Returns 404 - endpoint not implemented",
+        "impact": "Frontend may need this for market data",
+        "fix_priority": "LOW"
+      },
+      {
+        "endpoint": "/api/deeplink/market/*",
+        "issue": "Deep link handler not implemented",
+        "impact": "Telegram deep links may not work properly",
+        "fix_priority": "MEDIUM"
+      }
+    ],
+    "websocket_issues": [
+      {
+        "endpoint": "wss://*/live",
+        "issue": "WebSocket connection failed",
+        "impact": "Real-time live activity features not working",
+        "fix_priority": "HIGH"
+      }
+    ]
+  },
+  "frontend_issues": {
+    "integration_issues": [
+      {
+        "component": "LiveActivityTicker",
+        "issue": "Component not found/rendered on any page",
+        "affected_selectors": ["[data-testid='live-activity-ticker']"],
+        "fix_priority": "HIGH"
+      },
+      {
+        "component": "NotificationSettingsPanel", 
+        "issue": "Component not found in notification dropdown or settings",
+        "affected_selectors": ["[data-testid='notification-settings-panel']"],
+        "fix_priority": "HIGH"
+      }
+    ],
+    "missing_features": [
+      {
+        "feature": "Phase 6 Real-time Components",
+        "issue": "No Phase 6 code indicators found in page source",
+        "impact": "Real-time addiction engine features not visible to users",
+        "fix_priority": "HIGH"
+      }
+    ]
+  },
+  "passed_tests": [
+    "Backend health check",
+    "Live activity stats API",
+    "Push notification subscriptions CRUD",
+    "Notification settings management", 
+    "Watchlist functionality (markets and rivals)",
+    "Telegram ID linking",
+    "Notification statistics",
+    "Onchain markets and positions",
+    "Leaderboard API",
+    "Frontend basic loading and navigation",
+    "Notification bell icon and dropdown"
+  ],
+  "test_report_links": [
+    "/app/backend_test_phase6.py",
+    "/app/test_reports/phase6_backend_test_results.json"
+  ],
+  "action_item_for_main_agent": {
+    "high_priority": [
+      "Fix WebSocket connection for live activity features",
+      "Integrate LiveActivityTicker component into Arena page",
+      "Add NotificationSettingsPanel to notification dropdown or settings",
+      "Implement deep link handler for Telegram integration"
+    ],
+    "medium_priority": [
+      "Fix ObjectId validation in track notification click endpoint",
+      "Add missing /api/markets endpoint if needed by frontend"
+    ],
+    "notes": "Backend push notification system is functional but frontend integration is incomplete. Core Phase 6 features are implemented but not visible to users."
+  },
+  "updated_files": [
+    "/app/backend_test_phase6.py"
+  ],
+  "success_percentage": {
+    "backend": "60% (12/20 tests passed)",
+    "frontend": "30% (basic loading works, Phase 6 components missing)",
+    "overall": "45%"
+  },
+  "should_call_test_agent_after_fix": "true",
+  "should_main_agent_test_itself": "false"
+}

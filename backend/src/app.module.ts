@@ -47,6 +47,8 @@ import { TelegramBotModule } from './modules/telegram-bot/telegram-bot.module';
 import { FomoEngineModule } from './modules/fomo-engine/fomo-engine.module';
 import { GrowthLoopModule } from './modules/growth-loop/growth-loop.module';
 import { ABTestingModule } from './modules/ab-testing/ab-testing.module';
+import { PushNotificationsModule } from './modules/push-notifications/push-notifications.module';
+import { LiveActivityModule } from './modules/live-activity/live-activity.module';
 import { HealthController } from './modules/health/health.controller';
 
 @Module({
@@ -102,6 +104,8 @@ import { HealthController } from './modules/health/health.controller';
     FomoEngineModule,
     GrowthLoopModule,
     ABTestingModule,
+    PushNotificationsModule,
+    LiveActivityModule,
   ],
   controllers: [HealthController],
 })
