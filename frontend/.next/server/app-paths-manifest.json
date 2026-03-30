@@ -1,3 +1,4 @@
 {
-  "/tg/arena/page": "app/tg/arena/page.js"
+  "/page": "app/page.js",
+  "/tg/profile/page": "app/tg/profile/page.js"
 }

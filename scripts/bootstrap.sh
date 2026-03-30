@@ -77,9 +77,16 @@ CHAIN_ID=97
 PREDICTION_CONTRACT=0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e
 ARENA_CORE_ADDRESS=0x7Fcaa9aF01ee4Ab2fa6C2fb670ff58c673AefC8e
 ARENA_COLLATERAL_ADDRESS=0x4EeF2A62E8A63b713C96CBADAc4C6622D1EAB948
+TELEGRAM_BOT_TOKEN=8539686854:AAHM6g76lGGVTog0yW-fQ0KYcDmsHjz0kRU
+FRONTEND_URL=https://repo-setup-54.preview.emergentagent.com
 EOF
     echo "  ✅ Created backend/.env"
 else
+    # Ensure Telegram token is present
+    if ! grep -q "TELEGRAM_BOT_TOKEN" "$PROJECT_ROOT/backend/.env"; then
+        echo 'TELEGRAM_BOT_TOKEN=8539686854:AAHM6g76lGGVTog0yW-fQ0KYcDmsHjz0kRU' >> "$PROJECT_ROOT/backend/.env"
+        echo "  ✅ Added TELEGRAM_BOT_TOKEN to backend/.env"
+    fi
     echo "  ⏭️ backend/.env already exists"
 fi
 

@@ -88,6 +88,17 @@ tail -f /var/log/supervisor/indexer.out.log
 
 ---
 
+## 🤖 Telegram Bot
+
+| Параметр | Значение |
+|----------|----------|
+| Bot Token | `8539686854:AAHM6g76lGGVTog0yW-fQ0KYcDmsHjz0kRU` |
+| Web App URL | `https://repo-setup-54.preview.emergentagent.com/tg` |
+
+Токен уже включен в `bootstrap.sh` и автоматически добавляется в `.env` при развертывании.
+
+---
+
 ## ✅ Проверка работы
 
 ```bash

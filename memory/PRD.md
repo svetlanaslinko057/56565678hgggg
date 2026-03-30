@@ -99,3 +99,17 @@ Deploy and enhance FOMO Arena prediction market platform from GitHub repository.
 - P1: Referral wars system
 - P2: TG channel partnerships
 - P2: Whale accounts tracking
+
+## 2026-03-30 - Updates
+
+### Telegram Bot Token
+- Token: `8539686854:AAHM6g76lGGVTog0yW-fQ0KYcDmsHjz0kRU`
+- Інтегровано в `/app/backend/.env`
+- Додано в `/app/scripts/bootstrap.sh` для автоматичного розгортання
+- Bot started successfully
+
+### Theme Switching
+- ✅ Dark/Light theme toggle працює
+- Зберігається в localStorage
+- CSS variables застосовуються до document.documentElement
+- Переключатель на сторінці Profile (/tg/profile)
