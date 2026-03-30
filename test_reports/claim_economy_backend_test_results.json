@@ -1,19 +1,13 @@
 {
-  "timestamp": "2026-03-30T00:20:12.525227",
-  "test_type": "PHASE_3_5_CLAIM_FLOW_PHASE_4_ECONOMY_SYNC",
+  "timestamp": "2026-03-30T00:23:50.120617",
   "summary": {
-    "tests_run": 16,
-    "tests_passed": 16,
+    "tests_run": 19,
+    "tests_passed": 19,
     "tests_failed": 0,
     "success_rate": "100.0%"
   },
   "failed_tests": [],
   "detailed_results": {
-    "Backend API Health Check": {
-      "status": "PASSED",
-      "response_code": 200,
-      "response_data": "{\"status\":\"ok\",\"service\":\"fomo-arena\"}"
-    },
     "Economy Leaderboard": {
       "status": "PASSED",
       "response_code": 200,
@@ -24,70 +18,90 @@
       "response_code": 200,
       "response_data": "{\"success\":true,\"data\":[]}"
     },
-    "Get Positions for 0x12345678...": {
+    "User Economy Stats for 0x12345678...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"xp\":190,\"level\":2,\"xpProgress\":{\"current\":90,\"needed\":300,\"percentage\":30},\"totalBets\":2,\"totalWins\":2,\"totalLosses\":2,\"currentStreak\":0,\"bestStreak\":1,\"totalPnl\":2,\"badges\":[\"first_bet\",\"first_win\"],\"badgeDetails\":[{\"id\":\"first_bet\",\"name\":\"First Bet\",\"emoji\":\"\ud83c\udfaf\",\"description\":\"Placed your first bet\"},{\"id\":\"first_win\",\"name\":\"First Win\",\"emoji\":\"\ud83c\udfc6\",\"description\":\"Won your first prediction\"}],\"realStats\":{\"totalBets\""
+    },
+    "Get Onchain Positions": {
       "status": "PASSED",
       "response_code": 200,
       "response_data": "{\"success\":true,\"data\":[]}"
     },
-    "Get Positions for 0xabcdefab...": {
+    "Get Positions for Owner 0x12345678...": {
       "status": "PASSED",
       "response_code": 200,
       "response_data": "{\"success\":true,\"data\":[]}"
     },
-    "Get Positions for 0x742d35Cc...": {
+    "Get Won Positions": {
       "status": "PASSED",
       "response_code": 200,
       "response_data": "{\"success\":true,\"data\":[]}"
     },
-    "Positions with Status Filter (won)": {
+    "Main Leaderboard": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":[]}"
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
     },
-    "Positions with Status Filter (claimed)": {
+    "Leaderboard - Global": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":[]}"
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
     },
-    "Economy Stats for 0x12345678...": {
+    "Leaderboard - Weekly": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"xp\":85,\"level\":1,\"xpProgress\":{\"current\":85,\"needed\":100,\"percentage\":85},\"totalBets\":1,\"totalWins\":1,\"totalLosses\":1,\"currentStreak\":0,\"bestStreak\":1,\"totalPnl\":1,\"badges\":[\"first_bet\",\"first_win\"],\"badgeDetails\":[{\"id\":\"first_bet\",\"name\":\"First Bet\",\"emoji\":\"\ud83c\udfaf\",\"description\":\"Placed your first bet\"},{\"id\":\"first_win\",\"name\":\"First Win\",\"emoji\":\"\ud83c\udfc6\",\"description\":\"Won your first prediction\"}],\"realStats\":{\"totalBets\":"
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"This Week\",\"sortBy\":\"weeklyPnl\"}}"
     },
-    "Economy Stats for 0xabcdefab...": {
+    "Leaderboard - Profit": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\"xp\":0,\"level\":1,\"xpProgress\":{\"current\":0,\"needed\":100,\"percentage\":0},\"totalBets\":0,\"totalWins\":0,\"totalLosses\":0,\"currentStreak\":0,\"bestStreak\":0,\"totalPnl\":0,\"badges\":[],\"badgeDetails\":[],\"realStats\":{\"totalBets\":0,\"totalWins\":0,\"totalLosses\":0,\"totalClaimed\":0,\"totalStaked\":\"0.00\",\"totalClaimedAmount\":\"0.00\",\"realPnl\":\"0.00\",\"winRate\":\"0%\"}}}"
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
     },
-    "Economy Stats for 0x742d35Cc...": {
+    "Leaderboard - Duels": {
       "status": "PASSED",
       "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x742d35cc6634c0532925a3b8d4c9db96c4b5da5e\",\"xp\":0,\"level\":1,\"xpProgress\":{\"current\":0,\"needed\":100,\"percentage\":0},\"totalBets\":0,\"totalWins\":0,\"totalLosses\":0,\"currentStreak\":0,\"bestStreak\":0,\"totalPnl\":0,\"badges\":[],\"badgeDetails\":[],\"realStats\":{\"totalBets\":0,\"totalWins\":0,\"totalLosses\":0,\"totalClaimed\":0,\"totalStaked\":\"0.00\",\"totalClaimedAmount\":\"0.00\",\"realPnl\":\"0.00\",\"winRate\":\"0%\"}}}"
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"duelWins\"}}"
     },
-    "Webhook - Bet Placed Event": {
+    "Leaderboard - Xp": {
       "status": "PASSED",
-      "response_code": 201,
-      "response_data": "{\"success\":true}"
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[{\"rank\":1,\"wallet\":\"0x1234567890123456789012345678901234567890\",\"pnl\":0,\"winrate\":0,\"totalBets\":2,\"wins\":2,\"losses\":2,\"duelWins\":0,\"duelLosses\":0,\"xp\":190,\"level\":2,\"streak\":0,\"badges\":[\"first_bet\",\"first_win\"]},{\"rank\":2,\"wallet\":\"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\"pnl\":0,\"winrate\":0,\"totalBets\":0,\"wins\":0,\"losses\":0,\"duelWins\":0,\"duelLosses\":0,\"xp\":0,\"level\":1,\"streak\":0,\"badges\":[]},{\"rank\":3,\"wallet\":\"0x742d35cc6634c0532925a3b8d4c9db96c4b5da5e\",\"p"
     },
-    "Webhook - Position Won Event": {
+    "Global Leaderboard": {
       "status": "PASSED",
-      "response_code": 201,
-      "response_data": "{\"success\":true}"
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
     },
-    "Webhook - Position Lost Event": {
+    "Weekly Leaderboard": {
       "status": "PASSED",
-      "response_code": 201,
-      "response_data": "{\"success\":true}"
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"This Week\",\"sortBy\":\"weeklyPnl\"}}"
+    },
+    "XP Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[{\"rank\":1,\"wallet\":\"0x1234567890123456789012345678901234567890\",\"pnl\":0,\"winrate\":0,\"totalBets\":2,\"wins\":2,\"losses\":2,\"duelWins\":0,\"duelLosses\":0,\"xp\":190,\"level\":2,\"streak\":0,\"badges\":[\"first_bet\",\"first_win\"]},{\"rank\":2,\"wallet\":\"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\"pnl\":0,\"winrate\":0,\"totalBets\":0,\"wins\":0,\"losses\":0,\"duelWins\":0,\"duelLosses\":0,\"xp\":0,\"level\":1,\"streak\":0,\"badges\":[]},{\"rank\":3,\"wallet\":\"0x742d35cc6634c0532925a3b8d4c9db96c4b5da5e\",\"p"
+    },
+    "Get Onchain Markets": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Active Onchain Markets": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Health Check": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"status\":\"ok\",\"service\":\"fomo-arena\"}"
     },
     "Webhook - Position Claimed Event": {
       "status": "PASSED",
       "response_code": 201,
       "response_data": "{\"success\":true}"
-    },
-    "Economy Stats Alternative Endpoint": {
-      "status": "PASSED",
-      "response_code": 200,
-      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"xp\":170,\"level\":2,\"xpProgress\":{\"current\":70,\"needed\":300,\"percentage\":23.333333333333332},\"totalBets\":2,\"totalWins\":2,\"totalLosses\":2,\"currentStreak\":0,\"bestStreak\":1,\"totalPnl\":2,\"badges\":[\"first_bet\",\"first_win\"],\"badgeDetails\":[{\"id\":\"first_bet\",\"name\":\"First Bet\",\"emoji\":\"\ud83c\udfaf\",\"description\":\"Placed your first bet\"},{\"id\":\"first_win\",\"name\":\"First Win\",\"emoji\":\"\ud83c\udfc6\",\"description\":\"Won your first prediction\"}],\"realSta"
     }
   }
 }

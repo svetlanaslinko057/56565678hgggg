@@ -23,6 +23,23 @@
       "static/chunks/main-app.js",
       "static/css/app/tg/profile/page.css",
       "static/chunks/app/tg/profile/page.js"
+    ],
+    "/tg/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/tg/page.js"
+    ],
+    "/tg/duels/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/tg/duels/page.css",
+      "static/chunks/app/tg/duels/page.js"
+    ],
+    "/tg/leaderboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/tg/leaderboard/page.css",
+      "static/chunks/app/tg/leaderboard/page.js"
     ]
   }
 }

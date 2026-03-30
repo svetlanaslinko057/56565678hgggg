@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { TgPageContainer } from '@/components/tg';
 import { useTheme } from '@/lib/ThemeContext';
+import { MyPositions } from '@/components/tg/arena/MyPositions';
 import { 
   Trophy, Target, Flame, Medal, 
   Share2, Settings, Wallet, ChevronRight,
@@ -305,6 +306,9 @@ export default function TgProfilePage() {
           <div className="label">Duels Won</div>
         </StatCard>
       </StatsGrid>
+
+      <SectionTitle $textColor={theme.textMuted}>My Positions</SectionTitle>
+      <MyPositions />
 
       <SectionTitle $textColor={theme.textMuted}>Badges</SectionTitle>
       <BadgesList>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-PHASE 3 INDEXER SYNC - Backend API Testing
-Tests all indexer-related endpoints and mirror collection APIs
+FOMO Arena PHASE 3.5 CLAIM FLOW + PHASE 4 ECONOMY SYNC - Backend API Testing
+Tests MyPositions integration, XP API endpoints, and claim flow backend support
 """
 
 import requests
@@ -9,8 +9,8 @@ import sys
 import json
 from datetime import datetime
 
-class IndexerAPITester:
-    def __init__(self, base_url="https://08823ff1-a134-4508-b2e1-01a16250cf1f.preview.emergentagent.com"):
+class FOMOArenaAPITester:
+    def __init__(self, base_url="https://c71c518d-fc6c-40e7-b01d-a7a268bf1d7c.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
@@ -92,206 +92,169 @@ class IndexerAPITester:
 
 def main():
     print("=" * 60)
-    print("🚀 PHASE 3 INDEXER SYNC - Backend API Testing")
+    print("🚀 FOMO Arena PHASE 3.5 CLAIM FLOW + PHASE 4 ECONOMY SYNC - Backend API Testing")
     print("=" * 60)
     
-    tester = IndexerAPITester()
+    tester = FOMOArenaAPITester()
     
-    # ==================== INDEXER STATUS ====================
-    print("\n📊 INDEXER STATUS TESTS")
+    # ==================== ECONOMY/LEADERBOARD API ====================
+    print("\n🏆 ECONOMY/LEADERBOARD API TESTS")
     print("-" * 40)
     
-    success, indexer_status = tester.run_test(
-        "Indexer Status",
+    # Test economy leaderboard endpoint
+    success, leaderboard_response = tester.run_test(
+        "Economy Leaderboard",
         "GET",
-        "api/onchain/indexer/status",
+        "api/economy/leaderboard",
         200
     )
     
-    if success and indexer_status.get('data'):
-        status_data = indexer_status['data']
-        print(f"   Last Synced Block: {status_data.get('lastSyncedBlock', 'N/A')}")
-        print(f"   Is Running: {status_data.get('isRunning', 'N/A')}")
-        print(f"   Updated At: {status_data.get('updatedAt', 'N/A')}")
-        
-        # Validate indexer is running and syncing
-        if status_data.get('lastSyncedBlock', 0) > 98000000:  # BSC Testnet current block
-            print("   ✅ Indexer appears to be syncing recent blocks")
-        else:
-            print("   ⚠️  Indexer may not be syncing recent blocks")
+    # Test with limit parameter
+    tester.run_test(
+        "Economy Leaderboard with Limit",
+        "GET",
+        "api/economy/leaderboard",
+        200,
+        params={'limit': '10'}
+    )
     
-    # ==================== CONTRACT CONFIG ====================
-    print("\n⚙️ CONTRACT CONFIG TESTS")
+    # Test user economy stats
+    test_wallet = "0x1234567890123456789012345678901234567890"
+    tester.run_test(
+        f"User Economy Stats for {test_wallet[:10]}...",
+        "GET",
+        f"api/economy/stats/{test_wallet}",
+        200
+    )
+    
+    # ==================== ONCHAIN POSITIONS API ====================
+    print("\n🎯 ONCHAIN POSITIONS API TESTS")
     print("-" * 40)
+    
+    # Test positions endpoint (key for MyPositions component)
+    success, positions_response = tester.run_test(
+        "Get Onchain Positions",
+        "GET",
+        "api/onchain/positions",
+        200
+    )
+    
+    # Test positions with owner filter (what MyPositions uses)
+    tester.run_test(
+        f"Get Positions for Owner {test_wallet[:10]}...",
+        "GET",
+        "api/onchain/positions",
+        200,
+        params={'owner': test_wallet}
+    )
+    
+    # Test positions with status filter
+    tester.run_test(
+        "Get Won Positions",
+        "GET",
+        "api/onchain/positions",
+        200,
+        params={'status': 'won'}
+    )
+    
+    # Test single position by token ID if positions exist
+    if success and positions_response.get('data') and len(positions_response['data']) > 0:
+        position = positions_response['data'][0]
+        token_id = position.get('tokenId')
+        if token_id:
+            tester.run_test(
+                f"Get Single Position #{token_id}",
+                "GET",
+                f"api/onchain/positions/{token_id}",
+                200
+            )
+    
+    # ==================== LEADERBOARD API ====================
+    print("\n📊 LEADERBOARD API TESTS")
+    print("-" * 40)
+    
+    # Test main leaderboard endpoint
+    tester.run_test(
+        "Main Leaderboard",
+        "GET",
+        "api/leaderboard",
+        200
+    )
+    
+    # Test different leaderboard types
+    leaderboard_types = ['global', 'weekly', 'profit', 'duels', 'xp']
+    for lb_type in leaderboard_types:
+        tester.run_test(
+            f"Leaderboard - {lb_type.title()}",
+            "GET",
+            "api/leaderboard",
+            200,
+            params={'type': lb_type, 'limit': '10'}
+        )
+    
+    # Test specific leaderboard endpoints
+    tester.run_test(
+        "Global Leaderboard",
+        "GET",
+        "api/leaderboard/global",
+        200
+    )
     
     tester.run_test(
-        "Contract Config",
-        "GET", 
-        "api/onchain/config",
+        "Weekly Leaderboard", 
+        "GET",
+        "api/leaderboard/weekly",
         200
     )
     
-    # ==================== MARKETS MIRROR ====================
-    print("\n📈 MARKETS MIRROR TESTS")
+    tester.run_test(
+        "XP Leaderboard",
+        "GET", 
+        "api/leaderboard/xp",
+        200
+    )
+    
+    # ==================== MARKETS API ====================
+    print("\n📈 MARKETS API TESTS")
     print("-" * 40)
     
+    # Test onchain markets endpoint (for Arena page)
     success, markets_response = tester.run_test(
-        "Get On-chain Markets",
+        "Get Onchain Markets",
         "GET",
         "api/onchain/markets",
         200
     )
     
-    # Test with different parameters
+    # Test markets with filters
     tester.run_test(
-        "Markets with Status Filter",
+        "Active Onchain Markets",
         "GET",
         "api/onchain/markets",
         200,
         params={'status': 'active'}
     )
     
-    tester.run_test(
-        "Markets with Pagination",
-        "GET", 
-        "api/onchain/markets",
-        200,
-        params={'page': 1, 'limit': 10}
-    )
-    
-    tester.run_test(
-        "Markets Sorted by Trending",
-        "GET",
-        "api/onchain/markets", 
-        200,
-        params={'sortBy': 'trending', 'sortOrder': 'desc'}
-    )
-    
-    tester.run_test(
-        "Markets Sorted by Volume",
-        "GET",
-        "api/onchain/markets",
-        200, 
-        params={'sortBy': 'volume', 'sortOrder': 'desc'}
-    )
-    
     # Test single market if any exist
     if success and markets_response.get('data') and len(markets_response['data']) > 0:
         market = markets_response['data'][0]
-        market_id = market.get('marketId')
+        market_id = market.get('id') or market.get('marketId')
         if market_id:
             tester.run_test(
                 f"Get Single Market #{market_id}",
                 "GET",
-                f"api/onchain/markets/{market_id}",
-                200
-            )
-            
-            # Test market pressure/FOMO API
-            tester.run_test(
-                f"Market Pressure #{market_id}",
-                "GET", 
-                f"api/onchain/markets/{market_id}/pressure",
+                f"api/markets/{market_id}",
                 200
             )
     
-    # ==================== POSITIONS MIRROR ====================
-    print("\n🎯 POSITIONS MIRROR TESTS")
-    print("-" * 40)
-    
-    # Test with sample wallet addresses
-    test_wallets = [
-        "0x1234567890123456789012345678901234567890",
-        "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
-    ]
-    
-    for wallet in test_wallets:
-        tester.run_test(
-            f"Get Positions for {wallet[:10]}...",
-            "GET",
-            "api/onchain/positions",
-            200,
-            params={'owner': wallet}
-        )
-        
-        tester.run_test(
-            f"Get Token IDs for {wallet[:10]}...",
-            "GET",
-            f"api/onchain/positions/tokens/{wallet}",
-            200
-        )
-    
-    # Test positions with filters
-    tester.run_test(
-        "Positions with Status Filter",
-        "GET",
-        "api/onchain/positions",
-        200,
-        params={'owner': test_wallets[0], 'status': 'open'}
-    )
-    
-    # ==================== PROFILE API ====================
-    print("\n👤 PROFILE API TESTS")
-    print("-" * 40)
-    
-    for wallet in test_wallets:
-        tester.run_test(
-            f"Get Profile for {wallet[:10]}...",
-            "GET",
-            f"api/onchain/profile/{wallet}",
-            200
-        )
-    
-    # ==================== ACTIVITIES FEED ====================
-    print("\n📋 ACTIVITIES FEED TESTS")
+    # ==================== HEALTH CHECK ====================
+    print("\n❤️ HEALTH CHECK TESTS")
     print("-" * 40)
     
     tester.run_test(
-        "Get Activities Feed",
+        "Health Check",
         "GET",
-        "api/onchain/activities",
-        200
-    )
-    
-    tester.run_test(
-        "Activities with Type Filter",
-        "GET", 
-        "api/onchain/activities",
-        200,
-        params={'type': 'bet_placed'}
-    )
-    
-    tester.run_test(
-        "Activities with User Filter",
-        "GET",
-        "api/onchain/activities", 
-        200,
-        params={'user': test_wallets[0]}
-    )
-    
-    tester.run_test(
-        "Activities with Pagination",
-        "GET",
-        "api/onchain/activities",
-        200,
-        params={'page': 1, 'limit': 20}
-    )
-    
-    # ==================== LEADERBOARD & STATS ====================
-    print("\n🏆 LEADERBOARD & STATS TESTS")
-    print("-" * 40)
-    
-    tester.run_test(
-        "Get On-chain Leaderboard",
-        "GET",
-        "api/onchain/leaderboard",
-        200
-    )
-    
-    tester.run_test(
-        "Get On-chain Stats",
-        "GET", 
-        "api/onchain/stats",
+        "api/health",
         200
     )
     
@@ -299,23 +262,21 @@ def main():
     print("\n🔗 WEBHOOK TESTS")
     print("-" * 40)
     
-    # Test webhook endpoint (should accept POST)
+    # Test webhook endpoint for economy events
     webhook_data = {
-        "type": "bet_placed",
-        "user": "0x1234567890123456789012345678901234567890",
-        "marketId": 1,
+        "type": "position_claimed",
+        "wallet": test_wallet,
         "tokenId": 123,
-        "amount": "1000000000000000000",  # 1 USDT in wei
-        "outcome": 1,
-        "question": "Test market question",
+        "netAmount": "1000000000000000000",  # 1 USDT in wei
+        "feeAmount": "20000000000000000",    # 0.02 USDT fee
         "txHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
     }
     
     tester.run_test(
-        "Webhook Event Processing",
+        "Webhook - Position Claimed Event",
         "POST",
         "api/onchain/webhook/event",
-        201,  # Changed from 200 to 201 (Created is correct for POST)
+        201,  # 201 is correct for POST creation
         data=webhook_data
     )
     
@@ -340,7 +301,7 @@ def main():
                 print(f"   Response: {test['response']}")
     
     # Save detailed results
-    results_file = '/app/test_reports/indexer_backend_test_results.json'
+    results_file = '/app/test_reports/claim_economy_backend_test_results.json'
     with open(results_file, 'w') as f:
         json.dump({
             'timestamp': datetime.now().isoformat(),
