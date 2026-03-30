@@ -16,17 +16,17 @@ const pulse = keyframes`
 
 const Container = styled.div`
   position: fixed;
-  bottom: 60px;
+  bottom: 70px;
   left: 0;
   right: 0;
-  background: linear-gradient(180deg, rgba(15, 15, 25, 0) 0%, rgba(15, 15, 25, 0.95) 30%);
-  padding: 8px 0 12px;
-  z-index: 40;
+  background: linear-gradient(180deg, rgba(15, 15, 25, 0) 0%, rgba(15, 15, 25, 0.98) 40%);
+  padding: 12px 16px 16px;
+  z-index: 50;
   pointer-events: none;
   
   @media (min-width: 768px) {
-    bottom: 0;
-    padding: 12px 0;
+    bottom: 10px;
+    padding: 12px 20px;
   }
 `;
 
@@ -165,6 +165,16 @@ export const LiveActivityTicker: React.FC = () => {
   const { activities, isLive } = useLiveActivity(20);
   const [tickerItems, setTickerItems] = useState<TickerActivity[]>([]);
 
+  // Default placeholder items when no real activity
+  const defaultItems: TickerActivity[] = [
+    { id: 'default-1', type: 'bet', icon: '🎯', message: '0x7f3e...8d2a bet $25', side: 'YES' },
+    { id: 'default-2', type: 'whale', icon: '🐋', message: '0x4b2c...9f1d bet $250', side: 'YES' },
+    { id: 'default-3', type: 'win', icon: '🎉', message: '0x9a1f...3c5b won $180' },
+    { id: 'default-4', type: 'edge', icon: '⚡', message: 'BTC edge +12.5%', side: 'YES' },
+    { id: 'default-5', type: 'bet', icon: '🎯', message: '0x2d8e...7a4c bet $50', side: 'NO' },
+    { id: 'default-6', type: 'whale', icon: '🐋', message: '0x6f1a...2b9e bet $500', side: 'NO' },
+  ];
+
   useEffect(() => {
     // Convert activities to ticker format
     const items: TickerActivity[] = activities.map((activity, index) => {
@@ -208,13 +218,16 @@ export const LiveActivityTicker: React.FC = () => {
       };
     });
 
-    // Duplicate items for seamless scroll
-    setTickerItems([...items, ...items]);
+    // Use default items if no real activity, or duplicate real items for seamless scroll
+    if (items.length === 0) {
+      setTickerItems([...defaultItems, ...defaultItems]);
+    } else {
+      setTickerItems([...items, ...items]);
+    }
   }, [activities.length]);
 
-  if (tickerItems.length === 0) {
-    return null;
-  }
+  // Always render - show default activity or real activity
+  const displayItems = tickerItems.length > 0 ? tickerItems : [...defaultItems, ...defaultItems];
 
   return (
     <Container data-testid="live-activity-ticker">
@@ -223,10 +236,10 @@ export const LiveActivityTicker: React.FC = () => {
           <LiveBadge>
             <LiveDot />
             LIVE
-            <StatsCount>{activities.length} bets</StatsCount>
+            <StatsCount>{activities.length > 0 ? `${activities.length} bets` : 'Arena'}</StatsCount>
           </LiveBadge>
           
-          {tickerItems.map((item, index) => (
+          {displayItems.map((item, index) => (
             <TickerItem 
               key={`${item.id}-${index}`}
               $type={item.type}
