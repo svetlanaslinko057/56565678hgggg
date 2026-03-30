@@ -29,6 +29,22 @@ interface TransferArgs {
 }
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4001';
+
+/**
+ * Send webhook to backend for economy events (XP, notifications)
+ */
+async function sendEconomyWebhook(type: string, data: any): Promise<void> {
+  try {
+    await fetch(`${BACKEND_URL}/onchain/webhook/event`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, ...data }),
+    });
+  } catch (err) {
+    console.error(`Failed to send economy webhook (${type}):`, err);
+  }
+}
 
 /**
  * Handle BetPlaced / PositionMinted event
@@ -43,7 +59,10 @@ export async function handleBetPlaced(
   const outcome = Number(args.outcome);
   const user = args.user.toLowerCase();
   
-  console.log(`🎯 BetPlaced: Token #${tokenId} on Market #${marketId} by ${user.slice(0, 10)}...`);
+  console.log(`BetPlaced: Token #${tokenId} on Market #${marketId} by ${user.slice(0, 10)}...`);
+  
+  // Get market question for notification
+  const market = await MarketMirrorModel.findOne({ marketId });
   
   // Create or update position
   await PositionMirrorModel.findOneAndUpdate(
@@ -65,7 +84,6 @@ export async function handleBetPlaced(
   );
   
   // Update market totalStaked (use $set instead of $inc because amount is string)
-  const market = await MarketMirrorModel.findOne({ marketId });
   if (market) {
     const currentTotal = BigInt(market.totalStaked || '0');
     const newTotal = currentTotal + args.amount;
@@ -90,6 +108,17 @@ export async function handleBetPlaced(
     blockNumber,
     createdAt: new Date(),
   });
+
+  // Send economy webhook for XP award
+  await sendEconomyWebhook('bet_placed', {
+    wallet: user,
+    marketId,
+    tokenId,
+    amount: args.amount.toString(),
+    outcome,
+    question: market?.question,
+    txHash,
+  });
 }
 
 /**
@@ -103,7 +132,10 @@ export async function handlePositionClaimed(
   const tokenId = Number(args.tokenId);
   const owner = args.owner.toLowerCase();
   
-  console.log(`💰 PositionClaimed: Token #${tokenId} by ${owner.slice(0, 10)}... → ${args.netAmount.toString()}`);
+  console.log(`PositionClaimed: Token #${tokenId} by ${owner.slice(0, 10)}... -> ${args.netAmount.toString()}`);
+  
+  // Get position for market info
+  const position = await PositionMirrorModel.findOne({ tokenId });
   
   // Update position
   await PositionMirrorModel.findOneAndUpdate(
@@ -111,12 +143,16 @@ export async function handlePositionClaimed(
     {
       claimed: true,
       status: 'claimed',
+      claimedAt: new Date(),
+      claimTxHash: txHash,
+      claimData: {
+        grossAmount: args.grossAmount.toString(),
+        feeAmount: args.feeAmount.toString(),
+        netAmount: args.netAmount.toString(),
+      },
       updatedAt: new Date(),
     }
   );
-  
-  // Get position for activity
-  const position = await PositionMirrorModel.findOne({ tokenId });
   
   // Create activity
   await ActivityModel.create({
@@ -133,6 +169,16 @@ export async function handlePositionClaimed(
     txHash,
     blockNumber,
     createdAt: new Date(),
+  });
+
+  // Send economy webhook for XP award
+  await sendEconomyWebhook('position_claimed', {
+    wallet: owner,
+    tokenId,
+    marketId: position?.marketId,
+    netAmount: args.netAmount.toString(),
+    feeAmount: args.feeAmount.toString(),
+    txHash,
   });
 }
 

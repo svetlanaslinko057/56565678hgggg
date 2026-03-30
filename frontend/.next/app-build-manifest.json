@@ -1,21 +1,10 @@
 {
   "pages": {
-    "/page": [
+    "/tg/arena/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/page.css",
-      "static/chunks/app/page.js"
-    ],
-    "/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
-    ],
-    "/tg/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/tg/page.js"
+      "static/css/app/tg/arena/page.css",
+      "static/chunks/app/tg/arena/page.js"
     ],
     "/tg/layout": [
       "static/chunks/webpack.js",
@@ -23,11 +12,17 @@
       "static/css/app/tg/layout.css",
       "static/chunks/app/tg/layout.js"
     ],
-    "/tg/arena/page": [
+    "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/tg/arena/page.css",
-      "static/chunks/app/tg/arena/page.js"
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/tg/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/tg/profile/page.css",
+      "static/chunks/app/tg/profile/page.js"
     ]
   }
 }

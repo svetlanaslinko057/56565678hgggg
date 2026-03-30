@@ -17,6 +17,9 @@ export enum NotificationType {
   POSITION_CREATED = 'position_created',
   POSITION_WON = 'position_won',
   POSITION_LOST = 'position_lost',
+  POSITION_CLAIMED = 'position_claimed',
+  BET_PLACED = 'bet_placed',
+  LEVEL_UP = 'level_up',
 }
 
 export enum NotificationStatus {

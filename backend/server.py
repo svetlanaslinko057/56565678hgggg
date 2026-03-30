@@ -94,6 +94,7 @@ async def proxy(request: Request, path: str):
     """Proxy requests to NestJS backend"""
     try:
         async with httpx.AsyncClient() as client:
+            # NestJS routes have /api prefix
             url = f"{NEST_URL}/api/{path}"
             
             headers = dict(request.headers)

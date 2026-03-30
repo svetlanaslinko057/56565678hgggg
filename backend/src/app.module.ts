@@ -37,6 +37,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { TwoFaModule } from './modules/twofa/twofa.module';
 import { MirrorModule } from './modules/mirror/mirror.module';
 import { XpModule } from './modules/xp/xp.module';
+import { EconomyModule } from './modules/economy/economy.module';
 import { DiscussionsModule } from './modules/discussions/discussions.module';
 import { TickerModule } from './modules/ticker/ticker.module';
 import { VotingModule } from './modules/voting/voting.module';
@@ -91,6 +92,7 @@ import { HealthController } from './modules/health/health.controller';
     TwoFaModule,
     MirrorModule,
     XpModule,
+    EconomyModule,
     DiscussionsModule,
     TickerModule,
     VotingModule,
