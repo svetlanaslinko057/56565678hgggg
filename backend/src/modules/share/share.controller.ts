@@ -80,4 +80,18 @@ export class ShareController {
     const data = await this.shareService.getTopReferrers(parseInt(limit) || 10);
     return { success: true, data };
   }
+
+  /**
+   * Track win share for XP reward
+   */
+  @Post('win/:tokenId/track')
+  @ApiOperation({ summary: 'Track win share for XP reward' })
+  async trackWinShare(
+    @Param('tokenId') tokenId: string,
+    @Body() body: { platform: string },
+    @Headers('x-wallet-address') wallet?: string,
+  ) {
+    const data = await this.shareService.trackWinShare(tokenId, body.platform, wallet);
+    return { success: true, data };
+  }
 }

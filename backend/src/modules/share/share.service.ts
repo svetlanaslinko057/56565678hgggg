@@ -342,4 +342,62 @@ export class ShareService {
     const baseUrl = process.env.FRONTEND_URL || 'https://arena.fomo.com';
     return `${baseUrl}/s/${shareId}`;
   }
+
+  /**
+   * Track win share for XP reward (+5 XP)
+   */
+  async trackWinShare(tokenId: string, platform: string, wallet?: string): Promise<any> {
+    this.logger.log(`Win share tracked: token ${tokenId} on ${platform}`);
+
+    const shareTracksCollection = this.connection.collection('share_tracks');
+    const userStatsCollection = this.connection.collection('user_stats');
+
+    // Check if already shared (prevent spam)
+    const existing = await shareTracksCollection.findOne({
+      tokenId: parseInt(tokenId),
+      platform,
+    });
+
+    if (existing) {
+      return { 
+        success: true, 
+        message: 'Already tracked',
+        xpAwarded: 0,
+      };
+    }
+
+    // Record share
+    await shareTracksCollection.insertOne({
+      tokenId: parseInt(tokenId),
+      platform,
+      wallet: wallet?.toLowerCase(),
+      createdAt: new Date(),
+    });
+
+    // Award XP if wallet provided
+    let xpAwarded = 0;
+    if (wallet) {
+      const userWallet = wallet.toLowerCase();
+      const XP_SHARE_REWARD = 5;
+
+      await userStatsCollection.updateOne(
+        { wallet: userWallet },
+        { 
+          $inc: { xp: XP_SHARE_REWARD, sharesCount: 1 },
+          $set: { updatedAt: new Date() }
+        },
+        { upsert: true }
+      );
+
+      xpAwarded = XP_SHARE_REWARD;
+      this.logger.log(`Awarded ${XP_SHARE_REWARD} XP to ${userWallet} for sharing`);
+    }
+
+    return {
+      success: true,
+      platform,
+      tokenId,
+      xpAwarded,
+    };
+  }
 }

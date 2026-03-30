@@ -396,6 +396,16 @@ interface ClaimSheetProps {
   position: ClaimPosition | null;
   onClose: () => void;
   onClaimed?: (txHash: string, amount: number) => void;
+  onShareWin?: (data: {
+    tokenId: number;
+    marketId: number;
+    marketQuestion: string;
+    outcome: number;
+    outcomeLabel: string;
+    amountFormatted: string;
+    profitFormatted: string;
+    txHash: string;
+  }) => void;
 }
 
 const STEP_MESSAGES: Record<ClaimStep, { title: string; desc: string }> = {
@@ -409,7 +419,7 @@ const STEP_MESSAGES: Record<ClaimStep, { title: string; desc: string }> = {
 };
 
 // ==================== COMPONENT ====================
-export function ClaimSheet({ isOpen, position, onClose, onClaimed }: ClaimSheetProps) {
+export function ClaimSheet({ isOpen, position, onClose, onClaimed, onShareWin }: ClaimSheetProps) {
   const { theme } = useTheme();
   const { isConnected, isCorrectNetwork, walletAddress, switchToCorrectNetwork } = useWallet();
   const { claim, refresh, stableBalance } = usePredictionMarket();
@@ -590,7 +600,24 @@ export function ClaimSheet({ isOpen, position, onClose, onClaimed }: ClaimSheetP
               </SuccessTitle>
               <SuccessAmount data-testid="claim-success-amount">+${claimAmount}</SuccessAmount>
               <SuccessActions>
-                <ActionButton $variant="share" data-testid="share-claim-btn">
+                <ActionButton 
+                  $variant="share" 
+                  onClick={() => {
+                    triggerHaptic('medium');
+                    onShareWin?.({
+                      tokenId: position.tokenId,
+                      marketId: position.marketId,
+                      marketQuestion: position.marketQuestion || `Market #${position.marketId}`,
+                      outcome: position.outcome,
+                      outcomeLabel: position.outcomeLabel || (position.outcome === 0 ? 'YES' : 'NO'),
+                      amountFormatted: position.amountFormatted,
+                      profitFormatted: claimAmount,
+                      txHash: txHash || '',
+                    });
+                    handleClose();
+                  }}
+                  data-testid="share-claim-btn"
+                >
                   <Share2 size={18} />
                   Share Win
                 </ActionButton>

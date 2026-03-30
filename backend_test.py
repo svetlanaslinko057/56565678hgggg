@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-FOMO Arena PHASE 3.5 CLAIM FLOW + PHASE 4 ECONOMY SYNC - Backend API Testing
-Tests MyPositions integration, XP API endpoints, and claim flow backend support
+FOMO Arena PHASE 5 VIRAL LOOP (Share Win) - Backend API Testing
+Tests share win tracking endpoint, XP rewards, and viral loop backend support
 """
 
 import requests
@@ -92,10 +92,94 @@ class FOMOArenaAPITester:
 
 def main():
     print("=" * 60)
-    print("🚀 FOMO Arena PHASE 3.5 CLAIM FLOW + PHASE 4 ECONOMY SYNC - Backend API Testing")
+    print("🚀 FOMO Arena PHASE 5 VIRAL LOOP (Share Win) - Backend API Testing")
     print("=" * 60)
     
     tester = FOMOArenaAPITester()
+    
+    # ==================== PHASE 5: SHARE WIN TRACKING API ====================
+    print("\n🎉 PHASE 5: SHARE WIN TRACKING API TESTS")
+    print("-" * 40)
+    
+    # Test share win tracking endpoint - the main feature for PHASE 5
+    test_token_id = "123"
+    share_platforms = ['telegram', 'twitter', 'copy']
+    
+    for platform in share_platforms:
+        success, response = tester.run_test(
+            f"Track Win Share - {platform.title()}",
+            "POST",
+            f"api/share/win/{test_token_id}/track",
+            200,
+            data={"platform": platform}
+        )
+        
+        # Verify XP reward is mentioned in response
+        if success and response.get('data'):
+            data = response['data']
+            if 'xpAwarded' in data:
+                print(f"   ✅ XP Awarded: {data['xpAwarded']}")
+            else:
+                print(f"   ⚠️  No XP award info in response")
+    
+    # Test duplicate share tracking (should prevent spam)
+    tester.run_test(
+        "Track Win Share - Duplicate Prevention",
+        "POST",
+        f"api/share/win/{test_token_id}/track",
+        200,
+        data={"platform": "telegram"}
+    )
+    
+    # Test invalid token ID
+    tester.run_test(
+        "Track Win Share - Invalid Token ID",
+        "POST",
+        "api/share/win/invalid/track",
+        400  # Should return error for invalid token
+    )
+    
+    # ==================== SHARE LINK CREATION API ====================
+    print("\n🔗 SHARE LINK CREATION API TESTS")
+    print("-" * 40)
+    
+    # Test creating share link for position
+    test_position_id = "pos_123"
+    test_wallet = "0x1234567890123456789012345678901234567890"
+    
+    tester.run_test(
+        "Create Share Link for Position",
+        "POST",
+        f"api/share/position/{test_position_id}",
+        200,
+        data={}
+    )
+    
+    # Test getting share data (public endpoint)
+    test_share_id = "sh_test123"
+    tester.run_test(
+        "Get Share Link Data",
+        "GET",
+        f"api/share/{test_share_id}",
+        200  # Should work even if share doesn't exist (returns 404 or empty)
+    )
+    
+    # Test user share stats
+    tester.run_test(
+        "Get User Share Stats",
+        "GET",
+        "api/share/stats/me",
+        200
+    )
+    
+    # Test top referrers leaderboard
+    tester.run_test(
+        "Get Top Referrers Leaderboard",
+        "GET",
+        "api/share/leaderboard/referrers",
+        200,
+        params={'limit': '10'}
+    )
     
     # ==================== ECONOMY/LEADERBOARD API ====================
     print("\n🏆 ECONOMY/LEADERBOARD API TESTS")
@@ -301,7 +385,7 @@ def main():
                 print(f"   Response: {test['response']}")
     
     # Save detailed results
-    results_file = '/app/test_reports/claim_economy_backend_test_results.json'
+    results_file = '/app/test_reports/viral_loop_backend_test_results.json'
     with open(results_file, 'w') as f:
         json.dump({
             'timestamp': datetime.now().isoformat(),

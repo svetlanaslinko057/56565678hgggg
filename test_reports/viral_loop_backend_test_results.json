@@ -1,0 +1,195 @@
+{
+  "timestamp": "2026-03-30T07:55:17.165845",
+  "summary": {
+    "tests_run": 28,
+    "tests_passed": 21,
+    "tests_failed": 7,
+    "success_rate": "75.0%"
+  },
+  "failed_tests": [
+    {
+      "name": "Track Win Share - Telegram",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"data\":{\"success\":true,\"message\":\"Already tracked\",\"xpAwarded\":0}}"
+    },
+    {
+      "name": "Track Win Share - Twitter",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"data\":{\"success\":true,\"platform\":\"twitter\",\"tokenId\":\"123\",\"xpAwarded\":0}}"
+    },
+    {
+      "name": "Track Win Share - Copy",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"data\":{\"success\":true,\"platform\":\"copy\",\"tokenId\":\"123\",\"xpAwarded\":0}}"
+    },
+    {
+      "name": "Track Win Share - Duplicate Prevention",
+      "expected": 200,
+      "actual": 201,
+      "response": "{\"success\":true,\"data\":{\"success\":true,\"message\":\"Already tracked\",\"xpAwarded\":0}}"
+    },
+    {
+      "name": "Track Win Share - Invalid Token ID",
+      "expected": 400,
+      "actual": 201,
+      "response": "{\"success\":true,\"data\":{\"success\":true,\"tokenId\":\"invalid\",\"xpAwarded\":0}}"
+    },
+    {
+      "name": "Create Share Link for Position",
+      "expected": 200,
+      "actual": 500,
+      "response": "{\"success\":false,\"statusCode\":500,\"error\":\"Error\",\"message\":\"Cast to ObjectId failed for value \\\"pos_123\\\" (type string) at path \\\"_id\\\" for model \\\"Position\\\"\",\"timestamp\":\"2026-03-30T07:55:14.269Z\"}"
+    },
+    {
+      "name": "Get Share Link Data",
+      "expected": 200,
+      "actual": 404,
+      "response": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Share link not found\",\"timestamp\":\"2026-03-30T07:55:14.396Z\"}"
+    }
+  ],
+  "detailed_results": {
+    "Track Win Share - Telegram": {
+      "status": "FAILED",
+      "response_code": 201,
+      "error": "{\"success\":true,\"data\":{\"success\":true,\"message\":\"Already tracked\",\"xpAwarded\":0}}"
+    },
+    "Track Win Share - Twitter": {
+      "status": "FAILED",
+      "response_code": 201,
+      "error": "{\"success\":true,\"data\":{\"success\":true,\"platform\":\"twitter\",\"tokenId\":\"123\",\"xpAwarded\":0}}"
+    },
+    "Track Win Share - Copy": {
+      "status": "FAILED",
+      "response_code": 201,
+      "error": "{\"success\":true,\"data\":{\"success\":true,\"platform\":\"copy\",\"tokenId\":\"123\",\"xpAwarded\":0}}"
+    },
+    "Track Win Share - Duplicate Prevention": {
+      "status": "FAILED",
+      "response_code": 201,
+      "error": "{\"success\":true,\"data\":{\"success\":true,\"message\":\"Already tracked\",\"xpAwarded\":0}}"
+    },
+    "Track Win Share - Invalid Token ID": {
+      "status": "FAILED",
+      "response_code": 201,
+      "error": "{\"success\":true,\"data\":{\"success\":true,\"tokenId\":\"invalid\",\"xpAwarded\":0}}"
+    },
+    "Create Share Link for Position": {
+      "status": "FAILED",
+      "response_code": 500,
+      "error": "{\"success\":false,\"statusCode\":500,\"error\":\"Error\",\"message\":\"Cast to ObjectId failed for value \\\"pos_123\\\" (type string) at path \\\"_id\\\" for model \\\"Position\\\"\",\"timestamp\":\"2026-03-30T07:55:14.269Z\"}"
+    },
+    "Get Share Link Data": {
+      "status": "FAILED",
+      "response_code": 404,
+      "error": "{\"success\":false,\"statusCode\":404,\"error\":\"Not Found\",\"message\":\"Share link not found\",\"timestamp\":\"2026-03-30T07:55:14.396Z\"}"
+    },
+    "Get User Share Stats": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"totalLinks\":0,\"totalClicks\":0,\"totalConversions\":0,\"referralsCount\":0,\"conversionRate\":\"0\"}}"
+    },
+    "Get Top Referrers Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Economy Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Economy Leaderboard with Limit": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "User Economy Stats for 0x12345678...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"wallet\":\"0x1234567890123456789012345678901234567890\",\"xp\":210,\"level\":2,\"xpProgress\":{\"current\":110,\"needed\":300,\"percentage\":36.666666666666664},\"totalBets\":2,\"totalWins\":2,\"totalLosses\":2,\"currentStreak\":0,\"bestStreak\":1,\"totalPnl\":2,\"badges\":[\"first_bet\",\"first_win\"],\"badgeDetails\":[{\"id\":\"first_bet\",\"name\":\"First Bet\",\"emoji\":\"\ud83c\udfaf\",\"description\":\"Placed your first bet\"},{\"id\":\"first_win\",\"name\":\"First Win\",\"emoji\":\"\ud83c\udfc6\",\"description\":\"Won your first prediction\"}],\"realSt"
+    },
+    "Get Onchain Positions": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Get Positions for Owner 0x12345678...": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Get Won Positions": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":[]}"
+    },
+    "Main Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
+    },
+    "Leaderboard - Global": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
+    },
+    "Leaderboard - Weekly": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"This Week\",\"sortBy\":\"weeklyPnl\"}}"
+    },
+    "Leaderboard - Profit": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
+    },
+    "Leaderboard - Duels": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"duelWins\"}}"
+    },
+    "Leaderboard - Xp": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[{\"rank\":1,\"wallet\":\"0x1234567890123456789012345678901234567890\",\"pnl\":0,\"winrate\":0,\"totalBets\":2,\"wins\":2,\"losses\":2,\"duelWins\":0,\"duelLosses\":0,\"xp\":210,\"level\":2,\"streak\":0,\"badges\":[\"first_bet\",\"first_win\"]},{\"rank\":2,\"wallet\":\"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\"pnl\":0,\"winrate\":0,\"totalBets\":0,\"wins\":0,\"losses\":0,\"duelWins\":0,\"duelLosses\":0,\"xp\":0,\"level\":1,\"streak\":0,\"badges\":[]},{\"rank\":3,\"wallet\":\"0x742d35cc6634c0532925a3b8d4c9db96c4b5da5e\",\"p"
+    },
+    "Global Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"All Time\",\"sortBy\":\"pnl\"}}"
+    },
+    "Weekly Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[],\"total\":0,\"period\":\"This Week\",\"sortBy\":\"weeklyPnl\"}}"
+    },
+    "XP Leaderboard": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"success\":true,\"data\":{\"entries\":[{\"rank\":1,\"wallet\":\"0x1234567890123456789012345678901234567890\",\"pnl\":0,\"winrate\":0,\"totalBets\":2,\"wins\":2,\"losses\":2,\"duelWins\":0,\"duelLosses\":0,\"xp\":210,\"level\":2,\"streak\":0,\"badges\":[\"first_bet\",\"first_win\"]},{\"rank\":2,\"wallet\":\"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\"pnl\":0,\"winrate\":0,\"totalBets\":0,\"wins\":0,\"losses\":0,\"duelWins\":0,\"duelLosses\":0,\"xp\":0,\"level\":1,\"streak\":0,\"badges\":[]},{\"rank\":3,\"wallet\":\"0x742d35cc6634c0532925a3b8d4c9db96c4b5da5e\",\"p"
+    },
+    "Get Onchain Markets": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Active Onchain Markets": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"data\":[],\"meta\":{\"total\":0,\"page\":1,\"limit\":20,\"totalPages\":0}}"
+    },
+    "Health Check": {
+      "status": "PASSED",
+      "response_code": 200,
+      "response_data": "{\"status\":\"ok\",\"service\":\"fomo-arena\"}"
+    },
+    "Webhook - Position Claimed Event": {
+      "status": "PASSED",
+      "response_code": 201,
+      "response_data": "{\"success\":true}"
+    }
+  }
+}

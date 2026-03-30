@@ -9,6 +9,7 @@ import { usePredictionMarket } from '@/lib/contracts';
 import * as PredictionMarket from '@/lib/contracts/predictionMarket';
 import { CHAIN_CONFIG } from '@/lib/contracts/config';
 import ClaimSheet, { ClaimPosition } from './ClaimSheet';
+import ShareWinModal, { ShareWinData } from './ShareWinModal';
 import { triggerHaptic } from '@/lib/telegram';
 
 const spin = keyframes`
@@ -281,6 +282,8 @@ export function MyPositions({ onPositionClaimed }: MyPositionsProps) {
   const [loading, setLoading] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<ClaimPosition | null>(null);
   const [showClaimSheet, setShowClaimSheet] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareData, setShareData] = useState<ShareWinData | null>(null);
 
   const loadPositions = useCallback(async () => {
     if (!walletAddress || !marketAddress) return;
@@ -504,6 +507,31 @@ export function MyPositions({ onPositionClaimed }: MyPositionsProps) {
         position={selectedPosition}
         onClose={() => setShowClaimSheet(false)}
         onClaimed={handleClaimed}
+        onShareWin={(data) => {
+          setShareData({
+            tokenId: data.tokenId,
+            marketId: data.marketId,
+            marketQuestion: data.marketQuestion,
+            outcome: data.outcome,
+            outcomeLabel: data.outcomeLabel,
+            amount: '',
+            amountFormatted: data.amountFormatted,
+            profit: '',
+            profitFormatted: data.profitFormatted,
+            txHash: data.txHash,
+          });
+          setShowShareModal(true);
+        }}
+      />
+
+      {/* Share Win Modal */}
+      <ShareWinModal
+        isOpen={showShareModal}
+        data={shareData}
+        onClose={() => setShowShareModal(false)}
+        onShared={(platform) => {
+          console.log(`Shared on ${platform}`);
+        }}
       />
     </>
   );
