@@ -7,6 +7,7 @@ FOMO Arena - Prediction Market platform on BSC Testnet with Telegram Mini App in
 Deploy FOMO Arena repository from GitHub with implementation of:
 - PHASE 3.5: CLAIM FLOW (withdrawal of winnings)
 - PHASE 4: ECONOMY SYNC (XP/Leaderboard based on blockchain events)
+- PHASE 5: VIRAL LOOP (Share Win for organic growth)
 
 ## Architecture
 - **Frontend**: Next.js 14 (port 3000)
@@ -45,19 +46,36 @@ Deploy FOMO Arena repository from GitHub with implementation of:
   - Win → +50 XP + streak bonus
   - Loss → +5 XP (consolation)
   - Claim → +20 XP
+  - Share → +5 XP
   - Streak bonuses: 3-streak +100, 5-streak +200, 10-streak +500
 - **OnchainController** - API endpoints for economy data:
   - GET /api/onchain/positions - User positions
   - GET /api/onchain/leaderboard - Real leaderboard from positions_mirror
   - GET /api/onchain/stats/:wallet - User economy stats
-- **Indexer Webhooks** - Position events trigger XP awards:
-  - bet_placed, position_won, position_lost, position_claimed events
+- **Indexer Webhooks** - Position events trigger XP awards
 - **Notification Integration** - Notifications for all economy events
+
+### PHASE 5 - VIRAL LOOP (Share Win) ✅
+- **ShareWinModal.tsx** - Beautiful win card for sharing:
+  - Animated confetti celebration
+  - Profit amount display (large, green gradient)
+  - Market question with outcome badge
+  - Stats row: streak, rival beat, edge
+  - FOMO Arena branding footer
+- **Share Buttons**:
+  - Share to Telegram (deep link: t.me/bot?startapp=win_123)
+  - Share on X/Twitter
+  - Copy Link with formatted text
+- **XP Reward**: +5 XP for each share
+- **Tracking API**: POST /api/share/win/:tokenId/track
+  - Prevents duplicate rewards
+  - Records platform (telegram, twitter, copy)
 
 ## User Personas
 1. **Retail Bettors** - Casual users placing bets on crypto predictions
 2. **Whales** - High-volume traders competing for leaderboard positions
 3. **XP Hunters** - Users focused on badges and level progression
+4. **Viral Sharers** - Users who share wins for social proof
 
 ## Prioritized Backlog
 
@@ -66,21 +84,25 @@ Deploy FOMO Arena repository from GitHub with implementation of:
 - [x] MyPositions component
 - [x] Economy service
 - [x] XP system integration
+- [x] Share Win viral loop
 
 ### P1 (Next)
 - [ ] Real-time position status updates via WebSocket
-- [ ] Enhanced claim preview with gas estimation
-- [ ] PnL chart on profile page
-- [ ] Streak visualization
+- [ ] Push notifications to Telegram
+- [ ] Live bets feed
+- [ ] Whale alerts
 
 ### P2 (Future)
-- [ ] Share win on social media
-- [ ] Achievement system expansion
-- [ ] Referral program
-- [ ] Retention mechanics (loss recovery, revenge loop)
+- [ ] Streak visualization on Arena
+- [ ] Loss recovery mechanics
+- [ ] Revenge loop (rematch defeated rivals)
+- [ ] Referral program with bonuses
 
 ## Next Tasks
-1. Implement WebSocket for real-time position updates
-2. Add streak pressure UI (current streak display on Arena)
-3. Enhance leaderboard with real PnL data
-4. Add claim history to profile
+1. PHASE 6: REAL-TIME ADDICTION
+   - Live bets feed
+   - Whale alerts
+   - Edge jumps
+   - Push notifications in Telegram
+2. Add win streak counter to profile
+3. Enhanced deep link landing page
