@@ -1,14 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { TgPageContainer } from '@/components/tg';
 import { useTheme } from '@/lib/ThemeContext';
+import { useWallet } from '@/lib/wagmi';
 import { MyPositions } from '@/components/tg/arena/MyPositions';
+import { NotificationSettingsPanel } from '@/components/arena/NotificationSettingsPanel';
 import { 
   Trophy, Target, Flame, Medal, 
   Share2, Settings, Wallet, ChevronRight,
-  TrendingUp, Swords, Moon, Sun
+  TrendingUp, Swords, Moon, Sun, X, LogOut, Copy, Check, Bell
 } from 'lucide-react';
 
 const ProfileHeader = styled.div`
@@ -255,6 +257,138 @@ const ThemeButton = styled.button<{ $active: boolean; $accentColor: string; $tex
   }
 `;
 
+// Modal styles
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+`;
+
+const ModalContent = styled.div<{ $bgColor: string; $textColor: string }>`
+  background: ${props => props.$bgColor};
+  border-radius: 20px;
+  width: 100%;
+  max-width: 360px;
+  max-height: 80vh;
+  overflow-y: auto;
+`;
+
+const ModalHeader = styled.div<{ $borderColor: string; $textColor: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid ${props => props.$borderColor};
+  
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: ${props => props.$textColor};
+  }
+`;
+
+const CloseButton = styled.button<{ $textColor: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border-light);
+  color: ${props => props.$textColor};
+  cursor: pointer;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+`;
+
+const ModalBody = styled.div`
+  padding: 20px;
+`;
+
+const WalletInfo = styled.div<{ $bgColor: string; $textColor: string; $mutedColor: string }>`
+  background: ${props => props.$bgColor};
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  
+  .label {
+    font-size: 12px;
+    color: ${props => props.$mutedColor};
+    margin-bottom: 8px;
+  }
+  
+  .address {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: monospace;
+    font-size: 14px;
+    color: ${props => props.$textColor};
+  }
+`;
+
+const ActionButton = styled.button<{ $variant?: 'primary' | 'danger' }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+  
+  background: ${props => props.$variant === 'danger' 
+    ? 'rgba(239, 68, 68, 0.15)' 
+    : 'linear-gradient(135deg, #10B981 0%, #059669 100%)'};
+  color: ${props => props.$variant === 'danger' ? '#EF4444' : '#fff'};
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const ShareButton = styled.button<{ $bgColor: string; $textColor: string }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: ${props => props.$bgColor};
+  color: ${props => props.$textColor};
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 10px;
+  
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
 const badges = [
   { icon: '🎯', name: 'First Bet', earned: true },
   { icon: '🔥', name: '3 Streak', earned: true },
@@ -266,13 +400,50 @@ const badges = [
 
 export default function TgProfilePage() {
   const { theme, mode, toggleTheme, setTheme } = useTheme();
+  const { 
+    isConnected, 
+    walletAddress, 
+    shortAddress, 
+    connectWallet, 
+    disconnectWallet 
+  } = useWallet();
+  
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyAddress = () => {
+    if (walletAddress) {
+      navigator.clipboard.writeText(walletAddress);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const shareProfile = () => {
+    const shareUrl = `https://t.me/fomo_arena_bot?startapp=ref_${shortAddress || 'demo'}`;
+    if (navigator.share) {
+      navigator.share({
+        title: 'Join me on FOMO Arena!',
+        text: 'Bet on predictions and earn rewards!',
+        url: shareUrl,
+      });
+    } else {
+      navigator.clipboard.writeText(shareUrl);
+      alert('Link copied to clipboard!');
+    }
+  };
+
+  const displayAddress = isConnected ? shortAddress : '0x1234...5678';
+  const displayName = isConnected ? shortAddress : 'CryptoKing';
 
   return (
     <TgPageContainer>
       <ProfileHeader>
-        <Avatar $accentColor={theme.accent}>CK</Avatar>
-        <Username $textColor={theme.textPrimary}>CryptoKing</Username>
-        <WalletAddress $textColor={theme.textMuted}>0x1234...5678</WalletAddress>
+        <Avatar $accentColor={theme.accent}>{displayName?.slice(0, 2).toUpperCase() || 'CK'}</Avatar>
+        <Username $textColor={theme.textPrimary}>{displayName}</Username>
+        <WalletAddress $textColor={theme.textMuted}>{displayAddress}</WalletAddress>
         <LevelBadge>
           <Trophy size={14} /> Level 12
         </LevelBadge>
@@ -328,11 +499,17 @@ export default function TgProfilePage() {
 
       <SectionTitle $textColor={theme.textMuted}>Settings</SectionTitle>
       <MenuList>
-        <MenuItem $bgColor={theme.bgCard} $textColor={theme.textPrimary} $mutedColor={theme.textMuted}>
+        <MenuItem 
+          $bgColor={theme.bgCard} 
+          $textColor={theme.textPrimary} 
+          $mutedColor={theme.textMuted}
+          onClick={() => setShowWalletModal(true)}
+          data-testid="wallet-menu-item"
+        >
           <div className="icon"><Wallet size={18} /></div>
           <div className="text">
             <div className="title">Wallet</div>
-            <div className="subtitle">Connected: 0x1234...5678</div>
+            <div className="subtitle">{isConnected ? `Connected: ${displayAddress}` : 'Not connected'}</div>
           </div>
           <ChevronRight size={18} className="arrow" />
         </MenuItem>
@@ -370,7 +547,13 @@ export default function TgProfilePage() {
           </ThemeToggle>
         </MenuItem>
 
-        <MenuItem $bgColor={theme.bgCard} $textColor={theme.textPrimary} $mutedColor={theme.textMuted}>
+        <MenuItem 
+          $bgColor={theme.bgCard} 
+          $textColor={theme.textPrimary} 
+          $mutedColor={theme.textMuted}
+          onClick={() => setShowShareModal(true)}
+          data-testid="share-menu-item"
+        >
           <div className="icon"><Share2 size={18} /></div>
           <div className="text">
             <div className="title">Share Profile</div>
@@ -378,7 +561,14 @@ export default function TgProfilePage() {
           </div>
           <ChevronRight size={18} className="arrow" />
         </MenuItem>
-        <MenuItem $bgColor={theme.bgCard} $textColor={theme.textPrimary} $mutedColor={theme.textMuted}>
+        
+        <MenuItem 
+          $bgColor={theme.bgCard} 
+          $textColor={theme.textPrimary} 
+          $mutedColor={theme.textMuted}
+          onClick={() => setShowSettingsModal(true)}
+          data-testid="settings-menu-item"
+        >
           <div className="icon"><Settings size={18} /></div>
           <div className="text">
             <div className="title">Settings</div>
@@ -387,6 +577,111 @@ export default function TgProfilePage() {
           <ChevronRight size={18} className="arrow" />
         </MenuItem>
       </MenuList>
+
+      {/* Wallet Modal */}
+      {showWalletModal && (
+        <ModalOverlay onClick={() => setShowWalletModal(false)}>
+          <ModalContent 
+            $bgColor={theme.bgPrimary} 
+            $textColor={theme.textPrimary}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ModalHeader $borderColor={theme.border} $textColor={theme.textPrimary}>
+              <h3>Wallet</h3>
+              <CloseButton $textColor={theme.textPrimary} onClick={() => setShowWalletModal(false)}>
+                <X size={18} />
+              </CloseButton>
+            </ModalHeader>
+            <ModalBody>
+              {isConnected ? (
+                <>
+                  <WalletInfo $bgColor={theme.bgCard} $textColor={theme.textPrimary} $mutedColor={theme.textMuted}>
+                    <div className="label">Connected Address</div>
+                    <div className="address">
+                      <span>{walletAddress}</span>
+                      <button onClick={copyAddress} style={{ background: 'none', border: 'none', cursor: 'pointer', color: theme.accent }}>
+                        {copied ? <Check size={16} /> : <Copy size={16} />}
+                      </button>
+                    </div>
+                  </WalletInfo>
+                  <ActionButton $variant="danger" onClick={() => { disconnectWallet(); setShowWalletModal(false); }}>
+                    <LogOut size={18} />
+                    Disconnect Wallet
+                  </ActionButton>
+                </>
+              ) : (
+                <ActionButton onClick={() => { connectWallet(); setShowWalletModal(false); }}>
+                  <Wallet size={18} />
+                  Connect Wallet
+                </ActionButton>
+              )}
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+
+      {/* Share Modal */}
+      {showShareModal && (
+        <ModalOverlay onClick={() => setShowShareModal(false)}>
+          <ModalContent 
+            $bgColor={theme.bgPrimary} 
+            $textColor={theme.textPrimary}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ModalHeader $borderColor={theme.border} $textColor={theme.textPrimary}>
+              <h3>Share Profile</h3>
+              <CloseButton $textColor={theme.textPrimary} onClick={() => setShowShareModal(false)}>
+                <X size={18} />
+              </CloseButton>
+            </ModalHeader>
+            <ModalBody>
+              <p style={{ color: theme.textSecondary, marginBottom: 16, fontSize: 14 }}>
+                Invite friends to FOMO Arena and earn 10% of their trading fees!
+              </p>
+              <ActionButton onClick={shareProfile}>
+                <Share2 size={18} />
+                Share Referral Link
+              </ActionButton>
+              <ShareButton 
+                $bgColor={theme.bgCard} 
+                $textColor={theme.textPrimary}
+                onClick={() => {
+                  const link = `https://t.me/fomo_arena_bot?startapp=ref_${shortAddress || 'demo'}`;
+                  navigator.clipboard.writeText(link);
+                  alert('Link copied!');
+                }}
+              >
+                <Copy size={16} />
+                Copy Link
+              </ShareButton>
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+
+      {/* Settings Modal */}
+      {showSettingsModal && (
+        <ModalOverlay onClick={() => setShowSettingsModal(false)}>
+          <ModalContent 
+            $bgColor={theme.bgPrimary} 
+            $textColor={theme.textPrimary}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ModalHeader $borderColor={theme.border} $textColor={theme.textPrimary}>
+              <h3>Notification Settings</h3>
+              <CloseButton $textColor={theme.textPrimary} onClick={() => setShowSettingsModal(false)}>
+                <X size={18} />
+              </CloseButton>
+            </ModalHeader>
+            <ModalBody>
+              <NotificationSettingsPanel 
+                wallet={walletAddress || ''} 
+                onSave={() => setShowSettingsModal(false)}
+              />
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </TgPageContainer>
   );
 }

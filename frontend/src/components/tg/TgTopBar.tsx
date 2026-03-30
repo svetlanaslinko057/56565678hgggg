@@ -47,16 +47,18 @@ const BackButton = styled.button<{ $textColor: string }>`
   }
 `;
 
-const LogoContainer = styled.div<{ $filter: string }>`
+const LogoContainer = styled.div<{ $isDark: boolean }>`
   display: flex;
   align-items: center;
   height: 32px;
+  padding: ${props => props.$isDark ? '4px 8px' : '0'};
+  background: ${props => props.$isDark ? 'rgba(255, 255, 255, 0.95)' : 'transparent'};
+  border-radius: ${props => props.$isDark ? '8px' : '0'};
   
   img {
     height: 100%;
     width: auto;
-    filter: ${props => props.$filter};
-    transition: filter 0.3s ease;
+    transition: all 0.3s ease;
   }
 `;
 
@@ -168,7 +170,7 @@ interface TgTopBarProps {
 
 export function TgTopBar({ title, showBack, onBack }: TgTopBarProps) {
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const { 
     isConnected, 
     shortAddress, 
@@ -211,7 +213,7 @@ export function TgTopBar({ title, showBack, onBack }: TgTopBarProps) {
           {title ? (
             <Title $textColor={theme.textPrimary}>{title}</Title>
           ) : (
-            <LogoContainer $filter={theme.logoFilter}>
+            <LogoContainer $isDark={mode === 'dark'}>
               <img src="/images/logo.svg" alt="FOMO Arena" />
             </LogoContainer>
           )}
