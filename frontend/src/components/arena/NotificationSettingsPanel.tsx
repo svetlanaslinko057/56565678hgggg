@@ -5,12 +5,13 @@ import styled from 'styled-components';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Bell, Zap, Anchor, Clock, Trophy, Swords } from 'lucide-react';
+import { useTheme } from '@/lib/ThemeContext';
 
-const Container = styled.div`
-  background: rgba(30, 30, 40, 0.95);
+const Container = styled.div<{ $bgColor: string; $borderColor: string }>`
+  background: ${props => props.$bgColor};
   border-radius: 16px;
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid ${props => props.$borderColor};
 `;
 
 const Header = styled.div`
@@ -20,10 +21,10 @@ const Header = styled.div`
   margin-bottom: 20px;
 `;
 
-const Title = styled.h3`
+const Title = styled.h3<{ $textColor: string }>`
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
+  color: ${props => props.$textColor};
   margin: 0;
 `;
 
@@ -35,21 +36,21 @@ const Section = styled.div`
   }
 `;
 
-const SectionTitle = styled.h4`
+const SectionTitle = styled.h4<{ $textColor: string }>`
   font-size: 12px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: ${props => props.$textColor};
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0 0 12px 0;
 `;
 
-const SettingRow = styled.div`
+const SettingRow = styled.div<{ $borderColor: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid ${props => props.$borderColor};
   
   &:last-child {
     border-bottom: none;
@@ -62,11 +63,11 @@ const SettingInfo = styled.div`
   gap: 12px;
 `;
 
-const IconWrapper = styled.div<{ $color?: string }>`
+const IconWrapper = styled.div<{ $color?: string; $iconColor: string }>`
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: ${({ $color }) => $color || 'rgba(255, 255, 255, 0.1)'};
+  background: ${({ $color }) => $color || 'rgba(0, 0, 0, 0.1)'};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,19 +75,19 @@ const IconWrapper = styled.div<{ $color?: string }>`
   svg {
     width: 18px;
     height: 18px;
-    color: #fff;
+    color: ${props => props.$iconColor};
   }
 `;
 
-const SettingLabel = styled.div`
+const SettingLabel = styled.div<{ $textColor: string }>`
   font-size: 14px;
   font-weight: 500;
-  color: #fff;
+  color: ${props => props.$textColor};
 `;
 
-const SettingDescription = styled.div`
+const SettingDescription = styled.div<{ $textColor: string }>`
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: ${props => props.$textColor};
   margin-top: 2px;
 `;
 
@@ -101,25 +102,16 @@ const SliderLabel = styled.div`
   margin-bottom: 12px;
 `;
 
-const SliderValue = styled.span`
+const SliderValue = styled.span<{ $accentColor: string }>`
   font-size: 14px;
   font-weight: 600;
-  color: #00c8ff;
+  color: ${props => props.$accentColor};
 `;
 
-const CounterBadge = styled.span`
-  font-size: 11px;
-  padding: 2px 8px;
-  background: rgba(0, 200, 255, 0.1);
-  color: #00c8ff;
-  border-radius: 10px;
-  font-weight: 500;
-`;
-
-const SaveButton = styled.button`
+const SaveButton = styled.button<{ $accentColor: string }>`
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #00c8ff, #0090ff);
+  background: ${props => props.$accentColor};
   border: none;
   border-radius: 12px;
   font-size: 14px;
@@ -131,7 +123,7 @@ const SaveButton = styled.button`
   
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(0, 200, 255, 0.3);
+    opacity: 0.9;
   }
   
   &:disabled {
@@ -163,16 +155,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 /**
  * NotificationSettingsPanel
  * 
- * Settings for push notifications:
- * - Toggle notification types
- * - Set thresholds
- * - Rate limit control
+ * Settings for push notifications with theme support
  */
 export const NotificationSettingsPanel: React.FC<Props> = ({
   wallet,
   initialSettings,
   onSave,
 }) => {
+  const { theme, mode } = useTheme();
   const [settings, setSettings] = useState<NotificationSettings>({
     edgeAlerts: true,
     whaleAlerts: true,
@@ -187,8 +177,17 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // Theme-aware colors
+  const isDark = mode === 'dark';
+  const iconColors = {
+    edge: isDark ? '#9c27b0' : '#7b1fa2',
+    whale: isDark ? '#ffc107' : '#f9a825',
+    closing: isDark ? '#ff5757' : '#e53935',
+    win: isDark ? '#00ff88' : '#00c853',
+    rival: isDark ? '#ff6b6b' : '#ef5350',
+  };
+
   useEffect(() => {
-    // Fetch current settings
     const fetchSettings = async () => {
       try {
         const res = await fetch(`${API_URL}/api/push/subscriptions/${wallet}`);
@@ -237,23 +236,27 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
   };
 
   return (
-    <Container data-testid="notification-settings-panel">
+    <Container 
+      data-testid="notification-settings-panel"
+      $bgColor={theme.bgCard}
+      $borderColor={theme.border}
+    >
       <Header>
-        <Bell size={20} color="#00c8ff" />
-        <Title>Push Notifications</Title>
+        <Bell size={20} color={theme.accent} />
+        <Title $textColor={theme.textPrimary}>Push Notifications</Title>
       </Header>
 
       <Section>
-        <SectionTitle>Alert Types</SectionTitle>
+        <SectionTitle $textColor={theme.textMuted}>Alert Types</SectionTitle>
         
-        <SettingRow>
+        <SettingRow $borderColor={theme.borderLight}>
           <SettingInfo>
-            <IconWrapper $color="rgba(156, 39, 176, 0.2)">
+            <IconWrapper $color={`${iconColors.edge}20`} $iconColor={iconColors.edge}>
               <Zap />
             </IconWrapper>
             <div>
-              <SettingLabel>Edge Alerts</SettingLabel>
-              <SettingDescription>When edge jumps above threshold</SettingDescription>
+              <SettingLabel $textColor={theme.textPrimary}>Edge Alerts</SettingLabel>
+              <SettingDescription $textColor={theme.textMuted}>When edge jumps above threshold</SettingDescription>
             </div>
           </SettingInfo>
           <Switch
@@ -263,14 +266,14 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
           />
         </SettingRow>
 
-        <SettingRow>
+        <SettingRow $borderColor={theme.borderLight}>
           <SettingInfo>
-            <IconWrapper $color="rgba(255, 193, 7, 0.2)">
+            <IconWrapper $color={`${iconColors.whale}20`} $iconColor={iconColors.whale}>
               <Anchor />
             </IconWrapper>
             <div>
-              <SettingLabel>Whale Alerts</SettingLabel>
-              <SettingDescription>Big bets on watched markets</SettingDescription>
+              <SettingLabel $textColor={theme.textPrimary}>Whale Alerts</SettingLabel>
+              <SettingDescription $textColor={theme.textMuted}>Big bets on watched markets</SettingDescription>
             </div>
           </SettingInfo>
           <Switch
@@ -280,14 +283,14 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
           />
         </SettingRow>
 
-        <SettingRow>
+        <SettingRow $borderColor={theme.borderLight}>
           <SettingInfo>
-            <IconWrapper $color="rgba(255, 87, 87, 0.2)">
+            <IconWrapper $color={`${iconColors.closing}20`} $iconColor={iconColors.closing}>
               <Clock />
             </IconWrapper>
             <div>
-              <SettingLabel>Closing Alerts</SettingLabel>
-              <SettingDescription>Before markets close</SettingDescription>
+              <SettingLabel $textColor={theme.textPrimary}>Closing Alerts</SettingLabel>
+              <SettingDescription $textColor={theme.textMuted}>Before markets close</SettingDescription>
             </div>
           </SettingInfo>
           <Switch
@@ -297,14 +300,14 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
           />
         </SettingRow>
 
-        <SettingRow>
+        <SettingRow $borderColor={theme.borderLight}>
           <SettingInfo>
-            <IconWrapper $color="rgba(0, 255, 136, 0.2)">
+            <IconWrapper $color={`${iconColors.win}20`} $iconColor={iconColors.win}>
               <Trophy />
             </IconWrapper>
             <div>
-              <SettingLabel>Win Alerts</SettingLabel>
-              <SettingDescription>When you win a bet</SettingDescription>
+              <SettingLabel $textColor={theme.textPrimary}>Win Alerts</SettingLabel>
+              <SettingDescription $textColor={theme.textMuted}>When you win a bet</SettingDescription>
             </div>
           </SettingInfo>
           <Switch
@@ -314,14 +317,14 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
           />
         </SettingRow>
 
-        <SettingRow>
+        <SettingRow $borderColor={theme.borderLight}>
           <SettingInfo>
-            <IconWrapper $color="rgba(255, 107, 107, 0.2)">
+            <IconWrapper $color={`${iconColors.rival}20`} $iconColor={iconColors.rival}>
               <Swords />
             </IconWrapper>
             <div>
-              <SettingLabel>Rival Alerts</SettingLabel>
-              <SettingDescription>Duel challenges and results</SettingDescription>
+              <SettingLabel $textColor={theme.textPrimary}>Rival Alerts</SettingLabel>
+              <SettingDescription $textColor={theme.textMuted}>Duel challenges and results</SettingDescription>
             </div>
           </SettingInfo>
           <Switch
@@ -333,12 +336,12 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
       </Section>
 
       <Section>
-        <SectionTitle>Thresholds</SectionTitle>
+        <SectionTitle $textColor={theme.textMuted}>Thresholds</SectionTitle>
         
         <SliderRow>
           <SliderLabel>
-            <SettingLabel>Max Daily Notifications</SettingLabel>
-            <SliderValue>{settings.maxDailyNotifications}/day</SliderValue>
+            <SettingLabel $textColor={theme.textPrimary}>Max Daily Notifications</SettingLabel>
+            <SliderValue $accentColor={theme.accent}>{settings.maxDailyNotifications}/day</SliderValue>
           </SliderLabel>
           <Slider
             value={[settings.maxDailyNotifications]}
@@ -352,8 +355,8 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
 
         <SliderRow>
           <SliderLabel>
-            <SettingLabel>Edge Threshold</SettingLabel>
-            <SliderValue>+{settings.edgeThreshold}%</SliderValue>
+            <SettingLabel $textColor={theme.textPrimary}>Edge Threshold</SettingLabel>
+            <SliderValue $accentColor={theme.accent}>+{settings.edgeThreshold}%</SliderValue>
           </SliderLabel>
           <Slider
             value={[settings.edgeThreshold]}
@@ -367,8 +370,8 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
 
         <SliderRow>
           <SliderLabel>
-            <SettingLabel>Whale Threshold</SettingLabel>
-            <SliderValue>${settings.whaleThreshold}+</SliderValue>
+            <SettingLabel $textColor={theme.textPrimary}>Whale Threshold</SettingLabel>
+            <SliderValue $accentColor={theme.accent}>${settings.whaleThreshold}+</SliderValue>
           </SliderLabel>
           <Slider
             value={[settings.whaleThreshold]}
@@ -385,6 +388,7 @@ export const NotificationSettingsPanel: React.FC<Props> = ({
         onClick={handleSave}
         disabled={loading || saved}
         data-testid="save-notification-settings"
+        $accentColor={theme.accent}
       >
         {loading ? 'Saving...' : saved ? '✓ Saved' : 'Save Settings'}
       </SaveButton>

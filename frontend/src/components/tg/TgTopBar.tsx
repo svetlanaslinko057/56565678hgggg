@@ -214,7 +214,7 @@ export function TgTopBar({ title, showBack, onBack }: TgTopBarProps) {
             <Title $textColor={theme.textPrimary}>{title}</Title>
           ) : (
             <LogoContainer $isDark={mode === 'dark'}>
-              <img src="/images/logo.svg" alt="FOMO Arena" />
+              <img src="/images/logo.png" alt="FOMO Arena" />
             </LogoContainer>
           )}
         </LeftSection>
